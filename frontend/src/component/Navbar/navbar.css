@@ -1,0 +1,75 @@
+.navbar-container {
+  background-color: #007bff;
+  color: white;
+  font-family: sans-serif;
+}
+
+.phone{
+    font-size: large;
+    font-weight: 700;
+}
+
+/* Phần trên */
+.navbar-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 130px;
+  border-bottom: 1px solid #ffffff55;
+  background-color: #ffffff;
+  color: white;
+}
+
+.contact-info {
+  font-size: 14px;
+  color: #6E878F;
+}
+
+.brand-logo img {
+  height: 100px; /* hoặc tùy chỉnh */
+}
+
+.login-button-navbar button {
+  background-color: white;
+  color: #6E878F;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 22px;
+  transition: background-color 0.2s ease;
+}
+
+.login-button-navbar button:hover {
+  background-color: #e5e5e5;
+}
+
+
+/* Phần dưới */
+.navbar-bottom {
+  display: flex;
+  justify-content: center;
+  padding: 30px 20px;
+  background-color: #3D6889;
+}
+
+.navbar-links {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-links li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 18px;
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-links li a:hover {
+  text-decoration: underline;
+}
