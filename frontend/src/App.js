@@ -7,6 +7,8 @@ function HomePage() {
   return (
     <div>
       <Navbar />
+
+
       <h1 style={{ padding: '40px', textAlign: 'center' }}>Trang Chủ</h1>
     </div>
   );

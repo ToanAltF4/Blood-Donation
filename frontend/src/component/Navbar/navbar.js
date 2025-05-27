@@ -1,30 +1,75 @@
-import React from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './navbar.css'; // (Tùy chọn) để tách style riêng
+import './navbar.css';
 
 function Navbar() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+
+    // Đóng dropdown khi click ngoài
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleLoginClick = () => {
-    navigate('/login'); // Điều hướng đến trang đăng nhập
+    navigate('/login');
   };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/'); // hoặc reload: window.location.reload();
+  };
+
   return (
     <header className="navbar-container">
       <div className="navbar-top">
         <div className="contact-info">
-            Hotline Khẩn Cấp
-            <br></br>
-            <span className='phone'>1900 868 638</span>
+          Hotline Khẩn Cấp<br />
+          <span className="phone">1900 868 638</span>
         </div>
 
         <div className="brand-logo">
-            <img src="/logo.svg" alt="MyApp Logo" />
+          <img src="/logo.svg" alt="MyApp Logo" />
         </div>
 
-        <div className="login-button-navbar">
-            <button onClick={handleLoginClick}><img src="/icon/human.svg"/> Đăng nhập</button>
+        <div className="login-button-navbar" ref={dropdownRef}>
+          {user ? (
+            <div className="user-dropdown">
+              <div className="user-name" onClick={() => setDropdownOpen(!dropdownOpen)}>
+                <img src="/icon/human.svg" alt="user" /> {user.full_name} ▼
+              </div>
+              {dropdownOpen && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-item" >Ca nhan</div>
+                  <hr></hr>
+                  <div className="dropdown-item" onClick={handleLogout}>Đăng xuất</div>
+                  {/* Bạn có thể thêm tùy chọn khác ở đây */}
+                </div>
+              )}
+            </div>
+          ) : (
+            <button onClick={handleLoginClick}>
+              <img src="/icon/human.svg" alt="login" /> Đăng nhập
+            </button>
+          )}
         </div>
-    </div>
+      </div>
 
       <nav className="navbar-bottom">
         <ul className="navbar-links">
