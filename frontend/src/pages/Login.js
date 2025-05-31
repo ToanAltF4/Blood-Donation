@@ -26,7 +26,7 @@ function LoginPage() {
       console.log(response);
       if (response.status === 200) {
         const data = await response.json();
-        alert('Đăng nhập thành công');
+        alert('Đã đăng nhập thành công');
         console.log('User Info:', data.user);
         navigate('/');
         localStorage.setItem('user', JSON.stringify(data.user)); // Lưu thông tin người dùng vào localStorage
