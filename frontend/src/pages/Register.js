@@ -61,7 +61,7 @@ function RegisterPage() {
 
   return (
     <div className="register-page" style={{ backgroundImage: 'url(/img/background.svg)' }}>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="register-form-wrapper">
         <form className="register-form" onSubmit={handleRegister}>
           <h2>Đăng Ký</h2>

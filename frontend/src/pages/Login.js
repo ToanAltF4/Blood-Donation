@@ -51,7 +51,7 @@ function LoginPage() {
 
   return (
     <div className="login-page" style={{ backgroundImage: 'url(/img/background.svg)' }}>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="login-form-wrapper">
         <div className="login-form">
           <h2>Đăng Nhập</h2>

@@ -1,0 +1,115 @@
+.profile-page {
+  background-color: #f0f2f5;
+  min-height: 100vh;
+}
+
+.profile-wrapper {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Khối dùng chung */
+.profile-box {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* === Sidebar === */
+.sidebar-box {
+  width: 260px;
+  min-height: 400px;
+  background-color: #396382;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 30px 20px;
+}
+
+/* Cụm avatar + tên */
+.sidebar-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.avatar img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 8px;
+}
+
+.username {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+/* Cụm menu */
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 80px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  text-align: center;
+}
+
+.menu li {
+  margin: 12px 0;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.menu .logout {
+  font-weight: bold;
+}
+
+/* === About box === */
+.about-box {
+  flex: 1;
+  min-width: 300px;
+}
+
+.about-box h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color:#3D6889;
+}
+
+.info-row {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.info-row label {
+  width: 150px;
+  font-weight: 500;
+  color:#3D6889;
+  text-align: left;
+
+}
+
+.info-row span {
+  color: #333;
+  flex: 1;
+  text-align: left;
+  padding-left:80px ;
+}

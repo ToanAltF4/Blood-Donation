@@ -11,7 +11,11 @@ function Navbar() {
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const userObj = JSON.parse(storedUser);
+      setUser(userObj);
+      if (userObj.user_id) {
+        localStorage.setItem('user_id', userObj.user_id);
+      }
     }
 
     // Đóng dropdown khi click ngoài
@@ -56,7 +60,9 @@ function Navbar() {
               </div>
               {dropdownOpen && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-item" >Ca nhan</div>
+                  <div className="dropdown-item" onClick={() => navigate('/profile')}>Sự kiện đã đăng ký</div>
+                  <div className="dropdown-item" onClick={() => navigate('/profile')}>Lịch sử hiến máu</div>
+                  <div className="dropdown-item" onClick={() => navigate('/profile')}>Thông tin cá nhân</div>
                   <hr></hr>
                   <div className="dropdown-item" onClick={handleLogout}>Đăng xuất</div>
                   {/* Bạn có thể thêm tùy chọn khác ở đây */}
