@@ -7,11 +7,11 @@ const HOST = process.env.HOST || 'localhost';
 
 
 const authRoutes = require('./routes/auth');
-
+const newsRoutes = require('./routes/news');
 app.use(express.json());
 app.use(cors());
 app.use('/api/auth', authRoutes);
-app.use('/api/auth',authRoutes);
+app.use('/api/news', newsRoutes);
 
 
 

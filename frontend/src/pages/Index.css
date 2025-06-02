@@ -1,0 +1,361 @@
+.home-page {
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+}
+.intro-section {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 50px 80px;
+}
+
+.intro-header {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+  font-weight: bold;
+}
+
+.intro-content {
+  display: flex;
+  gap: 30px;
+}
+
+/* Cột trái - 30% */
+.intro-left {
+  flex: 3;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Cột phải - 70% */
+.intro-right {
+  flex: 7;
+}
+
+/* Grid 2 cột bên trong intro-right */
+.member-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.member-box {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 18px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.member-box h4 {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+
+.member-role {
+  font-style: italic;
+  margin-bottom: 10px;
+  color: #777;
+}
+
+.member-avatar-vertical {
+  width: 70%;
+  height: 70%;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 10px auto;
+  display: block;
+}
+
+.contact-info p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+#careful {
+  background-color: #3D6889;
+  color: #fff;
+  padding: 60px 80px;
+}
+
+.careful-container {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* Cột trái */
+.careful-left {
+  flex: 1;
+  min-width: 300px;
+}
+
+.careful-title {
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.standards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.standard-box {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+  color: #fff;
+}
+.standard-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.standard-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #e0e0e0;
+}
+
+/* Cột phải */
+.careful-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.caution-box {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.caution-box h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  padding-bottom: 5px;
+}
+
+.caution-box ul {
+  padding-left: 20px;
+}
+
+.caution-box ul li {
+  margin-bottom: 6px;
+}
+.news-section {
+  padding: 60px 80px;
+  background-color: #f4f4f4;
+  text-align: center;
+}
+@media (max-width: 480px) {
+  .news-section {
+    padding: 30px 20px;
+  }
+}
+
+.news-title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  justify-items: center;
+  margin-bottom: 30px;
+}
+
+.news-box {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+
+.news-box:hover {
+  transform: scale(1.03);
+}
+
+.news-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.news-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+}
+
+.news-box:hover .news-overlay {
+  opacity: 1;
+}
+
+.news-overlay h4 {
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.news-overlay p {
+  font-size: 13px;
+}
+
+.news-pagination {
+  margin: 20px 0;
+}
+
+.page-btn {
+  margin: 0 5px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.page-btn.active,
+.page-btn:hover {
+  background-color: #3D6889;
+  color: white;
+}
+
+.view-all-button button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  background-color: #3D6889;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.view-all-button button:hover {
+  background-color: #2f506b;
+}
+.contact-section {
+  background-color: #67798a;
+  padding: 60px 80px;
+}
+
+.contact-container {
+
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+/* Bên trái 50% */
+.contact-left {
+  flex: 1;
+  min-width: 300px;
+  
+}
+
+.contact-header {
+  font-size: 28px;
+  font-weight: bold;
+  color:#f4f4f4;
+  margin-bottom: 20px;
+}
+
+.contact-info {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color:#f4f4f4;
+}
+
+/* Bên phải 50% */
+.contact-right {
+  flex: 1;
+  min-width: 300px;
+}
+
+.faq-header {
+  font-size: 22px;
+  font-weight: bold;
+  color:#f4f4f4;
+  margin-bottom: 20px;
+}
+.accordion-item {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: box-shadow 0.3s;
+}
+
+.accordion-header-box {
+  background-color: #e9f1f6;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 16px;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.accordion-header-box:hover {
+  background-color: #d0e4ef;
+}
+
+.accordion-header-box.active {
+  background-color: #323a41;
+  color: white;
+}
+
+.accordion-body-box {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  background-color: white;
+  padding: 0 20px;
+}
+
+.accordion-body-box.show {
+  max-height: 500px; /* đủ lớn để hiển thị nội dung */
+  padding: 15px 20px;
+}
+
+.accordion-body-box p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #444;
+}
+.contact-logo {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.contact-logo img {
+  width: 350px; /* Hoặc điều chỉnh theo thiết kế */
+  height: auto;
+  object-fit: contain;
+}

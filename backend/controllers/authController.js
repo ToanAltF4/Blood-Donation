@@ -1,4 +1,5 @@
 const sql = require('../config/db');
+const bcrypt = require('bcryptjs');
 
 exports.login = async (req, res) => {
   try {
@@ -21,9 +22,11 @@ exports.login = async (req, res) => {
 
     const user = rows[0];
 
-    if (user.Password !== password) {
-      return res.status(401).json({ message: 'Mật khẩu không đúng.' });
+    const isMatch = await bcrypt.compare(password, user.Password);
+    if (!isMatch) {
+    return res.status(401).json({ message: 'Mật khẩu không đúng.' });
     }
+
 
     return res.status(200).json({
       message: 'Đăng nhập thành công.',
@@ -65,7 +68,7 @@ exports.register = async (req, res) => {
         if (existing.length > 0) {
             return res.status(409).json({ message: 'Email, số điện thoại hoặc CCCD đã tồn tại.' });
         }
-
+        const hashedPassword = await bcrypt.hash(password, 10);
         // Insert new user
         await sql.query(
             `INSERT INTO User (Full_Name, CCCD, Phone, Email, Password,Location, Role, Blood, Date_of_birth, Family_contact)
@@ -75,7 +78,7 @@ exports.register = async (req, res) => {
                 cccd,
                 phone,
                 email,
-                password,
+                hashedPassword,
                 location,
                 role || 'Member',
                 blood || null,

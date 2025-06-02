@@ -2,6 +2,7 @@ import './profile.css';
 import React from 'react';
 import Navbar from '../component/Navbar/navbar';
 function UserProfile() {
+  const user = JSON.parse(localStorage.getItem('user'));
   return (
     <div className="profile-page">
       {/* <Navbar /> */}
@@ -13,7 +14,7 @@ function UserProfile() {
             <div className="avatar">
               <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Avatar" />
             </div>
-            <h3 className="username">Nguyễn Văn A</h3>
+            <h3 className="username">{user.full_name}</h3>
           </div>
 
           <div className="sidebar-menu">
@@ -29,12 +30,12 @@ function UserProfile() {
         {/* About box */}
         <div className="profile-box about-box">
           <h2>About</h2>
-          <div className="info-row"><label>Full Name</label><span>Nguyễn Văn A</span></div>
-          <div className="info-row"><label>Email</label><span>abc@gmail.com</span></div>
-          <div className="info-row"><label>Phone</label><span>08299667890</span></div>
-          <div className="info-row"><label>Address</label><span>12, Tân Phú, Xyz</span></div>
-          <div className="info-row"><label>CCCD</label><span>0601039028</span></div>
-          <div className="info-row"><label>Blood Type</label><span>B</span></div>
+          <div className="info-row"><label>Full Name</label><span>{user.full_name}</span></div>
+          <div className="info-row"><label>Email</label><span>{user.email}</span></div>
+          <div className="info-row"><label>Phone</label><span>{user.phone}</span></div>
+          <div className="info-row"><label>Address</label><span>{user.location}</span></div>
+          <div className="info-row"><label>CCCD</label><span>{user.cccd}</span></div>
+          <div className="info-row"><label>Blood Type</label><span>{user.blood}</span></div>
         </div>
       </div>
     </div>

@@ -1,7 +1,16 @@
+html {
+  scroll-behavior: smooth;
+}
+
+
 .navbar-container {
   background-color: #007bff;
   color: white;
   font-family: sans-serif;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Tuỳ chọn: hiệu ứng bóng */
 }
 
 .phone{
@@ -20,7 +29,7 @@
   color: white;
 }
 
-.contact-info {
+.contact-info-navbar {
   font-size: 14px;
   color: #6E878F;
 }

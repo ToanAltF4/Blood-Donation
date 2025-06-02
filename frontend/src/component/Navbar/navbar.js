@@ -43,13 +43,14 @@ function Navbar() {
   return (
     <header className="navbar-container">
       <div className="navbar-top">
-        <div className="contact-info">
+        <div className="contact-info-navbar">
           Hotline Khẩn Cấp<br />
           <span className="phone">1900 868 638</span>
         </div>
 
         <div className="brand-logo">
-          <img src="/logo.svg" alt="MyApp Logo" />
+          <img onClick={() => navigate('/')}
+    style={{ cursor: 'pointer' }} src="/logo.svg" alt="MyApp Logo" />
         </div>
 
         <div className="login-button-navbar" ref={dropdownRef}>
@@ -79,11 +80,11 @@ function Navbar() {
 
       <nav className="navbar-bottom">
         <ul className="navbar-links">
-          <li><a href="/">TRANG CHỦ</a></li>
-          <li><a href="/about">GIỚI THIỆU</a></li>
-          <li><a href="/services">ĐĂNG KÝ LỊCH</a></li>
-          <li><a href="/blog">TIN TỨC</a></li>
-          <li><a href="/contact">LIÊN HỆ</a></li>
+          <li><a href="#homepage">TRANG CHỦ</a></li>
+          <li><a href="#intro">GIỚI THIỆU</a></li>
+          <li><a href="#careful">LƯU Ý</a></li>
+          <li><a href="#news">TIN TỨC</a></li>
+          <li><a href="#contact">FAQ</a></li>
         </ul>
       </nav>
     </header>
