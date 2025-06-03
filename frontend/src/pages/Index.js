@@ -205,12 +205,13 @@ function Index() {
           <div className="intro-content">
             {/* Cột trái 30% */}
             <div className="intro-left">
-              <h3>Về Doanh nghiệp</h3>
+              <h3>Về Cơ Sở Y Tế</h3>
               <p>
-                Chúng tôi là một nền tảng hỗ trợ kết nối người hiến máu với các
+                Chúng tôi là một nền tảng hỗ trợ kết nối người hiến máu với
                 cơ sở y tế. Với sứ mệnh "Một giọt máu - Triệu hy vọng", chúng
                 tôi mong muốn xây dựng một cộng đồng hiến máu nhân đạo rộng lớn,
-                minh bạch và hiệu quả.
+                minh bạch và hiệu quả, đồng thời truy xuất thông tin của khách hàng
+                để đảm bảo quyền lợi và an toàn cho người hiến máu.
               </p>
             </div>
 
@@ -218,29 +219,29 @@ function Index() {
             <div className="intro-right">
               <div className="member-grid">
                 <div className="member-box">
-                  <h4>Nguyễn Văn A</h4>
-                  <p className="member-role">CEO</p>
+                  <h4>Phạm Đức Toàn</h4>
+                  <p className="member-role">fullstack Developer</p>
                   <img
                     src="https://tse4.mm.bing.net/th?id=OIP.PRxNOObh8Efy-7irFJNBygHaHa&pid=Api&P=0&h=180"
                     alt="CEO"
                     className="member-avatar-vertical"
                   />
                   <div className="contact-info">
-                    <p>Email: ceo@example.com</p>
-                    <p>SĐT: 0901 234 567</p>
+                    <p>Email: toanpdse180165@fpt.edu.vn</p>
+                    <p>SĐT: 0868 396 721</p>
                   </div>
                 </div>
 
                 <div className="member-box">
-                  <h4>Trần Thị B</h4>
-                  <p className="member-role">Founder</p>
+                  <h4>Nguyễn Văn Tiên</h4>
+                  <p className="member-role">Frontend Developer</p>
                   <img
                     src="https://p16-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-euttp/b785f99ba39cb08030591a9aeb0868bc~c5_720x720.jpeg"
                     alt="Founder"
                     className="member-avatar-vertical"
                   />
                   <div className="contact-info">
-                    <p>Email: founder@example.com</p>
+                    <p>Email: tiennvse180325@fpt.edu.vn</p>
                     <p>SĐT: 0912 345 678</p>
                   </div>
                 </div>

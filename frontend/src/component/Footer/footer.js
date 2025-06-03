@@ -23,12 +23,12 @@ function Footer() {
           <div className="footer-col">
             <p><strong>TT Blood Donation</strong></p>
             <p>📍 99 Lê Văn Việt, Phường Tân Phú,<br />Thủ Đức, TP. Hồ Chí Minh</p>
-            <p>Email<br />bloodyellow@bloodyellow.com</p>
+            <p>Email<br />ptoan638@gmail.com</p>
           </div>
           <div className="footer-col">
             <p><strong>📞 Số Điện Thoại</strong></p>
-            <p>028 3868 6868</p>
-            <p>028 3868 8868</p>
+            <p>0868 396 721</p>
+            <p>0909 123 456</p>
           </div>
         </div>
       </div>

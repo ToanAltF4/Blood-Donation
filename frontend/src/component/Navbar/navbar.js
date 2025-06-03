@@ -80,11 +80,11 @@ function Navbar() {
 
       <nav className="navbar-bottom">
         <ul className="navbar-links">
-          <li><a href="#homepage">TRANG CHỦ</a></li>
-          <li><a href="#intro">GIỚI THIỆU</a></li>
-          <li><a href="#careful">LƯU Ý</a></li>
-          <li><a href="#news">TIN TỨC</a></li>
-          <li><a href="#contact">FAQ</a></li>
+          <li onClick={() => navigate('/')}><a href="#homepage">TRANG CHỦ</a></li>
+          <li onClick={() => navigate('/')}><a href="#intro">GIỚI THIỆU</a></li>
+          <li onClick={() => navigate('/')}><a href="#careful">LƯU Ý</a></li>
+          <li onClick={() => navigate('/')}><a href="#news">TIN TỨC</a></li>
+          <li onClick={() => navigate('/')}><a href="#contact">FAQ</a></li>
         </ul>
       </nav>
     </header>
