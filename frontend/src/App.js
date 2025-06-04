@@ -8,6 +8,7 @@ import LoginPage from './pages/Login';
 import UserProfile from './pages/profile';
 import Index from './pages/Index';
 import ControllAccount from './admin/controllAccount';
+import ControllEvent from './admin/controllEvent';
 function HomePage() {
   return (
     <div>
@@ -29,6 +30,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/admin/accounts" element={<ControllAccount />} />
+        <Route path="/admin/events" element={<ControllEvent />} />
+        {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />
     </Router>

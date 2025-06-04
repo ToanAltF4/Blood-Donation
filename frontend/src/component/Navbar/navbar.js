@@ -40,19 +40,28 @@ function Navbar() {
           <>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/staff/requests")}
+              onClick={() => navigate("/staff/events")}
             >
-              Xử lý yêu cầu
+              Quản Lý Sự Kiện
             </div>
             <div
               className="dropdown-item"
               onClick={() => navigate("/staff/reports")}
             >
-              Thống kê báo cáo
+              Kho Máu
             </div>
             <hr />
             <div className="dropdown-item" onClick={handleLogout}>
-              Đăng xuất
+              Gửi Thông Báo
+            </div>
+            <div className="dropdown-item" onClick={handleLogout}>
+              Yêu Cầu Máu Khẩn Cấp
+            </div>
+            <div className="dropdown-item" onClick={handleLogout}>
+              Thống Kê
+            </div>
+            <div className="dropdown-item" onClick={handleLogout}>
+              Đăng Xuất
             </div>
           </>
         );
