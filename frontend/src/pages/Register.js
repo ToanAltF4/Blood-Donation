@@ -104,7 +104,7 @@ function RegisterPage() {
               <input type="text" name="blood" placeholder="A+, O-,..." value={formData.blood} onChange={handleChange} />
             </div>
             <div className="form-group">
-              <label>Ngày Sinh</label>
+              <label>Ngày Sinh<span>*</span></label>
               <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} />
             </div>
           </div>
