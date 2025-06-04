@@ -7,6 +7,7 @@ import RegisterPage from './pages/Register';
 import LoginPage from './pages/Login';
 import UserProfile from './pages/profile';
 import Index from './pages/Index';
+import ControllAccount from './admin/controllAccount';
 function HomePage() {
   return (
     <div>
@@ -27,6 +28,7 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/admin/accounts" element={<ControllAccount />} />
       </Routes>
       <Footer />
     </Router>

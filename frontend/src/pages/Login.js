@@ -28,7 +28,14 @@ function LoginPage() {
         const data = await response.json();
         alert('Đăng nhập thành công');
         console.log('User Info:', data.user);
-        navigate('/');
+        const role = data.user.role;
+        if (role === 'Admin') {
+          navigate('/admin/dashboard');
+        } else if (role === 'Staff') {
+          navigate('/staff/page');
+        } else {
+          navigate('/');
+        }
         localStorage.setItem('user', JSON.stringify(data.user)); // Lưu thông tin người dùng vào localStorage
         // navigate('/dashboard'); // nếu cần điều hướng
       } else if (response.status === 400 || response.status === 401) {
@@ -78,7 +85,7 @@ function LoginPage() {
 
           <button className="login-button" onClick={handleLoginClick}>Đăng Nhập</button>
 
-          <div className="register-prompt">
+          <div className="register-prompt"> 
             Chưa có tài khoản? <a onClick={handleNavigateRegister}>Đăng ký</a>
           </div>
         </div>
