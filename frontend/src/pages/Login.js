@@ -29,6 +29,8 @@ function LoginPage() {
         alert('Đăng nhập thành công');
         console.log('User Info:', data.user);
         const role = data.user.role;
+        localStorage.setItem('user', JSON.stringify(data.user)); // Lưu thông tin người dùng vào localStorage
+        localStorage.setItem('token', data.token); // Lưu token vào localStorage
         if (role === 'Admin') {
           navigate('/admin/dashboard');
         } else if (role === 'Staff') {
@@ -36,7 +38,6 @@ function LoginPage() {
         } else {
           navigate('/');
         }
-        localStorage.setItem('user', JSON.stringify(data.user)); // Lưu thông tin người dùng vào localStorage
         // navigate('/dashboard'); // nếu cần điều hướng
       } else if (response.status === 400 || response.status === 401) {
         alert('Đăng nhập không thành công');
