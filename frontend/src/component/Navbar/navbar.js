@@ -40,7 +40,7 @@ function Navbar() {
           <>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/staff/events")}
+              onClick={() => navigate("/admin/events")}
             >
               Quản Lý Sự Kiện
             </div>
@@ -126,70 +126,76 @@ function Navbar() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.clear();
     setUser(null);
     navigate("/"); // hoặc reload: window.location.reload();
   };
 
   return (
-    <header className="navbar-container">
-      <div className="navbar-top">
-        <div className="contact-info-navbar">
-          Hotline Khẩn Cấp
-          <br />
-          <span className="phone">1900 868 638</span>
-        </div>
+    <header className="sticky-top shadow">
+  <div className="bg-white py-2 border-bottom d-flex justify-content-between align-items-center px-5">
+    <div className="text-muted">
+      <div>Hotline Khẩn Cấp</div>
+      <strong className="text-dark">1900 868 638</strong>
+    </div>
 
-        <div className="brand-logo">
-          <img
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-            src="/logo.svg"
-            alt="MyApp Logo"
-          />
-        </div>
+    <div>
+      <img
+        src="/logo.svg"
+        alt="Logo"
+        style={{ height: "80px", cursor: "pointer" }}
+        onClick={() => navigate("/")}
+      />
+    </div>
 
-        <div className="login-button-navbar" ref={dropdownRef}>
-          {user ? (
-            <div className="user-dropdown">
-              <div
-                className="user-name"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <img src="/icon/human.svg" alt="user" /> {user.full_name} ▼
-              </div>
-              {dropdownOpen && (
-                <div className="dropdown-menu">{renderDropdownItems()}</div>
-              )}
-            </div>
-          ) : (
-            <button onClick={handleLoginClick}>
-              <img src="/icon/human.svg" alt="login" /> Đăng nhập
-            </button>
+    <div className="position-relative" ref={dropdownRef}>
+      {user ? (
+        <div className="dropdown">
+          <button
+            className="btn btn-light dropdown-toggle d-flex align-items-center gap-2"
+            onClick={() => setDropdownOpen(!dropdownOpen)}
+          >
+            <img src="/icon/human.svg" alt="user" width={24} />
+            {user.full_name}
+          </button>
+          {dropdownOpen && (
+            <ul className="dropdown-menu show mt-2" style={{ right: 0, left: "auto" }}>
+              {renderDropdownItems()}
+            </ul>
           )}
         </div>
-      </div>
+      ) : (
+        <button className="btn btn-outline-secondary d-flex align-items-center gap-2" onClick={handleLoginClick}>
+          <img src="/icon/human.svg" alt="login" width={24} />
+          Đăng nhập
+        </button>
+      )}
+    </div>
+  </div>
 
-      <nav className="navbar-bottom">
-        <ul className="navbar-links">
-          <li onClick={() => navigate("/")}>
-            <a href="#homepage">TRANG CHỦ</a>
-          </li>
-          <li onClick={() => navigate("/")}>
-            <a href="#intro">GIỚI THIỆU</a>
-          </li>
-          <li onClick={() => navigate("/")}>
-            <a href="#careful">LƯU Ý</a>
-          </li>
-          <li onClick={() => navigate("/")}>
-            <a href="#news">TIN TỨC</a>
-          </li>
-          <li onClick={() => navigate("/")}>
-            <a href="#contact">FAQ</a>
-          </li>
-        </ul>
-      </nav>
-    </header>
+  <nav style={{backgroundColor: "#3D6889"}} className="navbar navbar-expand-lg navbar-dark py-2">
+    <div className="container justify-content-center">
+      <ul className="navbar-nav gap-4">
+        <li className="nav-item ">
+          <a className="nav-link" href={window.location.pathname === "/" ? "#" : "/"}>TRANG CHỦ</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href={window.location.pathname === "/" ? "#intro" : "/"}>GIỚI THIỆU</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href={window.location.pathname === "/" ? "#careful" : "/"}>LƯU Ý</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href={window.location.pathname === "/" ? "#news" : "/"}>TIN TỨC</a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link" href={window.location.pathname === "/" ? "#contact" : "/"}>FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
   );
 }
 

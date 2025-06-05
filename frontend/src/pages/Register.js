@@ -60,66 +60,161 @@ function RegisterPage() {
   };
 
   return (
-    <div className="register-page" style={{ backgroundImage: 'url(/img/background.svg)' }}>
-      <div className="register-form-wrapper">
-        <form className="register-form" onSubmit={handleRegister}>
-          <h2>Đăng Ký</h2>
+     
+    <div
+      className="d-flex min-vh-100"
+      style={{
+        backgroundImage: "url(/img/background.svg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="container d-flex justify-content-end align-items-center">
+        <form
+          className="bg-white rounded-4 shadow p-5"
+          style={{ width: "730px", height: "90%" }}
+          onSubmit={handleRegister}
+        >
+          <h2 className="text-center mb-4 fw-bold" style={{color:"#3D6889"}}>Đăng Ký</h2>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Số CMND/CCCD/Hộ Chiếu<span>*</span></label>
-              <input type="text" name="cccd" placeholder="Nhập giấy tờ tùy thân" value={formData.cccd} onChange={handleChange} />
+          <div className="row g-3">
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Số CMND/CCCD/Hộ Chiếu <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="cccd"
+                placeholder="Nhập giấy tờ tùy thân"
+                value={formData.cccd}
+                onChange={handleChange}
+              />
             </div>
-            <div className="form-group">
-              <label>Họ Và Tên<span>*</span></label>
-              <input type="text" name="full_name" placeholder="Nhập họ và tên" value={formData.full_name} onChange={handleChange} />
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Họ và Tên <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="full_name"
+                placeholder="Nhập họ và tên"
+                value={formData.full_name}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Địa Chỉ <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="location"
+                placeholder="Nhập địa chỉ"
+                value={formData.location}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Số Điện Thoại <span className="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                name="phone"
+                placeholder="Nhập số điện thoại"
+                value={formData.phone}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Email <span className="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                className="form-control"
+                name="email"
+                placeholder="Nhập email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Mật khẩu <span className="text-danger">*</span>
+              </label>
+              <input
+                type="password"
+                className="form-control"
+                name="password"
+                placeholder="Nhập mật khẩu"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">Nhóm máu</label>
+              <input
+                type="text"
+                className="form-control"
+                name="blood"
+                placeholder="A+, O-,..."
+                value={formData.blood}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-md-6">
+              <label className="form-label fw-bold">
+                Ngày sinh <span className="text-danger">*</span>
+              </label>
+              <input
+                type="date"
+                className="form-control"
+                name="date_of_birth"
+                value={formData.date_of_birth}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="col-12">
+              <label className="form-label fw-bold">Người thân liên hệ</label>
+              <input
+                type="text"
+                className="form-control"
+                name="family_contact"
+                placeholder="SĐT người thân"
+                value={formData.family_contact}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Địa Chỉ<span>*</span></label>
-              <input type="text" name="location" placeholder="Nhập Địa Chỉ" value={formData.location} onChange={handleChange}/>
-            </div>
-            <div className="form-group">
-              <label>Số Điện Thoại<span>*</span></label>
-              <input type="text" name="phone" placeholder="Nhập số điện thoại" value={formData.phone} onChange={handleChange} />
-            </div>
+          <div className="d-grid mt-4">
+            <button type="submit" className="btn btn-primary rounded-pill fw-bold" style={{ backgroundColor: "#3D6889", color: "white" }}>
+              Đăng Ký
+            </button>
           </div>
 
-          <div className="form-row">
-            <div className="form-group">
-              <label>Email<span>*</span></label>
-              <input type="email" name="email" placeholder="Nhập email" value={formData.email} onChange={handleChange} />
-            </div>
-            <div className="form-group">
-              <label>Mật Khẩu<span>*</span></label>
-              <input type="password" name="password" placeholder="Nhập mật khẩu" value={formData.password} onChange={handleChange} />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Nhóm Máu</label>
-              <input type="text" name="blood" placeholder="A+, O-,..." value={formData.blood} onChange={handleChange} />
-            </div>
-            <div className="form-group">
-              <label>Ngày Sinh<span>*</span></label>
-              <input type="date" name="date_of_birth" value={formData.date_of_birth} onChange={handleChange} />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <label>Người thân liên hệ</label>
-              <input type="text" name="family_contact" placeholder="SĐT người thân" value={formData.family_contact} onChange={handleChange} />
-            </div>
-          </div>
-
-          <button className="register-button" type="submit">Đăng Ký</button>
-
-          <div className="login-prompt">
-            Đã có tài khoản? <a onClick={() => navigate('/login')}>Đăng nhập ngay</a>
+          <div className="text-center mt-3">
+            Đã có tài khoản?{" "}
+            <button
+              type="button"
+              className="btn btn-link fw-bold p-0"
+              onClick={() => navigate("/login")}
+            >
+              Đăng nhập ngay
+            </button>
           </div>
         </form>
       </div>

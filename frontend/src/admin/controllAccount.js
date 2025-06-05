@@ -20,6 +20,10 @@ function ControllAccount() {
   // 🔥 Lấy danh sách user từ API
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")); // Lưu thông tin người dùng vào localStorage
+    if (!user || !user.role) {
+      navigate("/");
+      return;
+    }
     if (user.role != "Admin") {
       navigate("/");
     }
@@ -136,98 +140,107 @@ function ControllAccount() {
   };
 
   return (
-    <div className="page-container">
-      <div className="card-container">
-        <div className="top-control">
-          <h2>Quản lý tài khoản</h2>
-          <div className="filter-group">
-            <select
-              className="select-box"
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-            >
-              <option value="All">Tất cả vai trò</option>
-              <option value="Admin">Admin</option>
-              <option value="Staff">Staff</option>
-              <option value="Member">Member</option>
-            </select>
-            <input
-              className="search-input"
-              type="text"
-              placeholder="Tìm kiếm"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <div className="button-wrapper">
-              <button
-                className="button-submit"
-                onClick={() => setModalOpen(true)}
-              >
-                THAY ĐỔI ROLE
-              </button>
-            </div>
-          </div>
-        </div>
+    <div className="container py-4">
+  <div className="card shadow p-4">
+    <div className="mb-4">
+      <h2 className="fw-bold">Quản lý tài khoản</h2>
+    </div>
 
-        <DataTable
-          columns={columns}
-          data={filteredUsers}
-          pagination
-          paginationPerPage={perPage}
-          highlightOnHover
-          striped
-          customStyles={customStyles}
+    {/* Thanh filter */}
+    <div className="row align-items-center mb-3 gy-2">
+      <div className="col-md-3">
+        <select
+          className="form-select"
+          value={filterRole}
+          onChange={(e) => setFilterRole(e.target.value)}
+        >
+          <option value="All">Tất cả vai trò</option>
+          <option value="Admin">Admin</option>
+          <option value="Staff">Staff</option>
+          <option value="Member">Member</option>
+        </select>
+      </div>
+      <div className="col-md-6">
+        <input
+          className="form-control"
+          type="text"
+          placeholder="Tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
+      <div className="col-md-3 text-end">
+        <button className="btn btn-success w-100" onClick={() => setModalOpen(true)}>
+          THAY ĐỔI ROLE
+        </button>
+      </div>
+    </div>
 
-      {modalOpen && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Thay đổi vai trò</h3>
-            <label>Chọn người dùng:</label>
-            <select
-              className="modal-selectUser"
-              value={selectedEmail}
-              onChange={(e) => setSelectedEmail(e.target.value)}
-            >
-              <option value="">Chọn email</option>
-              {users.map((user) => (
-                <option key={user.User_ID} value={user.Email}>
-                  {user.Email}
-                </option>
-              ))}
-            </select>
+    {/* DataTable */}
+    <DataTable
+      columns={columns}
+      data={filteredUsers}
+      pagination
+      paginationPerPage={perPage}
+      highlightOnHover
+      striped
+      customStyles={customStyles}
+    />
+  </div>
 
-            <label>Chọn vai trò mới:</label>
-            <select
-              className="modal-selectRole"
-              value={newRole}
-              onChange={(e) => setNewRole(e.target.value)}
-            >
-              <option value="">Chọn role</option>
-              <option value="Admin">Admin</option>
-              <option value="Staff">Staff</option>
-              <option value="Member">Member</option>
-            </select>
-
-            <div className="modal-buttons">
-              <button
-                className="modal-buttons-confirm"
-                onClick={handleRoleChangeSubmit}
+  {/* Modal */}
+  {modalOpen && (
+    <div className="modal d-block show w-100 vh-100" tabIndex="-1" style={{ background: "rgba(0,0,0,0.5)" }}>
+      <div className="modal-dialog modal-dialog-centered">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h5 className="modal-title">Thay đổi vai trò</h5>
+            <button type="button" className="btn-close" onClick={() => setModalOpen(false)}></button>
+          </div>
+          <div className="modal-body">
+            <div className="mb-3">
+              <label className="form-label">Chọn người dùng:</label>
+              <select
+                className="form-select"
+                value={selectedEmail}
+                onChange={(e) => setSelectedEmail(e.target.value)}
               >
-                Xác nhận
-              </button>
-              <button
-                className="modal-buttons-cancel"
-                onClick={() => setModalOpen(false)}
+                <option value="">Chọn email</option>
+                {users.map((user) => (
+                  <option key={user.User_ID} value={user.Email}>
+                    {user.Email}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Chọn vai trò mới:</label>
+              <select
+                className="form-select"
+                value={newRole}
+                onChange={(e) => setNewRole(e.target.value)}
               >
-                Hủy
-              </button>
+                <option value="">Chọn role</option>
+                <option value="Admin">Admin</option>
+                <option value="Staff">Staff</option>
+                <option value="Member">Member</option>
+              </select>
             </div>
           </div>
+          <div className="modal-footer">
+            <button className="btn btn-success" onClick={handleRoleChangeSubmit}>
+              Xác nhận
+            </button>
+            <button className="btn btn-danger" onClick={() => setModalOpen(false)}>
+              Hủy
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
+  )}
+</div>
+
   );
 }
 

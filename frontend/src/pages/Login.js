@@ -58,36 +58,73 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-page" style={{ backgroundImage: 'url(/img/background.svg)' }}>
-      {/* <Navbar /> */}
-      <div className="login-form-wrapper">
-        <div className="login-form">
-          <h2>Đăng Nhập</h2>
+    <div
+      className="d-flex min-vh-100"
+      style={{
+        backgroundImage: "url(/img/background.svg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="container d-flex justify-content-end align-items-center">
+        <div className="bg-white rounded-4 shadow p-5" style={{ width: "  530px" }}>
+          <h2 className="text-center mb-4 fw-bold" style={{color: "#3D6889"}}>Đăng Nhập</h2>
 
-          <label>Số điện thoại/email<span className="required">*</span></label>
-          <input
-            type="text"
-            placeholder="Nhập SDT/Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <label>Mật Khẩu<span className="required">*</span></label>
-          <input
-            type="password"
-            placeholder="Nhập mật khẩu"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-
-          <div className="forgot-password">
-            <a onClick={handleForgotPasswordClick}>Bạn quên mật khẩu?</a>
+          <div className="mb-3">
+            <label className="form-label fw-bold text-dark">
+              Số điện thoại/email<span className="text-danger ms-1">*</span>
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Nhập SDT/Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
-          <button className="login-button" onClick={handleLoginClick}>Đăng Nhập</button>
+          <div className="mb-3">
+            <label className="form-label fw-bold text-dark">
+              Mật Khẩu<span className="text-danger ms-1">*</span>
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              placeholder="Nhập mật khẩu"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
 
-          <div className="register-prompt"> 
-            Chưa có tài khoản? <a onClick={handleNavigateRegister}>Đăng ký</a>
+          <div className="text-end mb-3">
+            <button
+              type="button"
+              className="btn btn-link p-0"
+              onClick={handleForgotPasswordClick}
+            >
+              Bạn quên mật khẩu?
+            </button>
+          </div>
+
+          <div className="d-grid mb-3">
+            <button
+              type="button" style={{ backgroundColor: "#3D6889", color: "white" }}
+              className="btn rounded-pill fw-bold"
+              onClick={handleLoginClick}
+            >
+              Đăng Nhập
+            </button>
+          </div>
+
+          <div className="text-center">
+            Chưa có tài khoản?{" "}
+            <button
+              type="button"
+              className="btn btn-link fw-bold p-0"
+              onClick={handleNavigateRegister}
+            >
+              Đăng ký
+            </button>
           </div>
         </div>
       </div>

@@ -5,5 +5,9 @@ const authenticateToken = require('../middlewares/authenticate');
 const authorizeRoles = require('../middlewares/authorize');
 router.get('/getAllUsers',authenticateToken, authorizeRoles('Admin'), adminController.getAllUsers);
 router.post('/changeRole', authenticateToken, authorizeRoles('Admin'), adminController.changeUserRole);
-
+router.get('/getAllEvents', authenticateToken, authorizeRoles('Admin','Staff'), adminController.getAllEvents);
+router.post('/addEvent', authenticateToken, authorizeRoles('Admin','Staff'), adminController.addEvent);
+router.post('/changeEvents' , authenticateToken, authorizeRoles('Admin','Staff'), adminController.changeEvent);
+router.post('/deleteEvents', authenticateToken, authorizeRoles('Admin','Staff'), adminController.deleteEvent);
+router.get('/getAllBloodBanks', authenticateToken, authorizeRoles('Admin'), adminController.getAllUnitOfBlood);
 module.exports = router;

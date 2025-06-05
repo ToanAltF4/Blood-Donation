@@ -1,141 +1,15 @@
-.page-container {
-  height: 100vh;
-  background-color: #f5f5f5;
-  padding: 20px;
+.modal {
+  z-index: 1050; /* đảm bảo modal nổi trên mọi thành phần */
 }
-
-.card-container {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  max-width: 1100px;
-  margin: 0 auto;
-  height: calc(100vh - 300px);
-  overflow-y: auto;
-}
-
-.top-control {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
-}
-
-.filter-group {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.filter-group select,
-.filter-group input {
-  padding: 6px;
-}
-
-.modal-overlay {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.5);
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5); /* nền mờ */
   display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.modal {
-  background: white;
-  padding: 24px;
-  border-radius: 10px;
-  width: 400px;
-}
-.modal-selectUser{
-    width: 100%;
-    padding: 6px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-top: 12px;
-}
-.modal-selectRole{
-    width: 100%;
-    padding: 6px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    margin-top: 12px;
-}
-.modal h3{
-    margin-top: 0;
-    font-size: 24px;
-    font-weight: 600;
-    color: #333;
-    text-align: center;
-}
-
-.modal label {
-  display: block;
-  margin-top: 12px;
-  margin-bottom: 6px;
-}
-
-.modal select {
-  width: 100%;
-  padding: 6px;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    border: none;
-}
-.modal-buttons-confirm{
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-.modal-buttons-cancel {
-  background-color: #f44336;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.button-submit {
-  background-color: #4CAF50;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  float: right; /* ✅ canh phải */
-}
-.button-wrapper {
-  display: flex;
-  justify-content: flex-end; /* ✅ đẩy nút sang phải */
-}
-
-.search-input{
-    width: 650px;
-    height: 24px;
-    padding: 6px;
-
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-.select-box{
-    width: 200px;
-    padding: 6px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+  justify-content: center; /* căn giữa theo chiều ngang */
+  align-items: center;     /* căn giữa theo chiều dọc */
+  z-index: 1050;
 }
