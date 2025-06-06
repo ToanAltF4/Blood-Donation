@@ -23,12 +23,11 @@ function ControllEvent() {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user")); // Lưu thông tin người dùng vào localStorage
-    console.log("User:", user.role);
     if (!user || !user.role) {
       navigate("/");
       return;
     }
-    if (user.role == "Member") {
+    if (user.role != "Admin" && user.role != "Staff") {
       navigate("/");
     }
     const fetchEvents = async () => {
