@@ -44,6 +44,9 @@ function Navbar() {
             >
               Quản Lý Sự Kiện
             </div>
+            <div className="dropdown-item" onClick={()=> navigate("admin/news")}>
+              Quản lý bài đăng
+            </div>
             <div
               className="dropdown-item"
               onClick={() => navigate("/staff/reports")}
