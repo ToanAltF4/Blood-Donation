@@ -26,7 +26,7 @@ function Navbar() {
             <div className="dropdown-item" onClick={() => navigate("/admin/events")}>
               Quản lý sự kiện
             </div>
-            <div className="dropdown-item" onClick={handleLogout}>
+            <div className="dropdown-item" onClick={()=> navigate("admin/news")}>
               Quản lý bài đăng
             </div>
             <div className="dropdown-item" onClick={handleLogout}>

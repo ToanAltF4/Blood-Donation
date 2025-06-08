@@ -13,15 +13,9 @@ import Index from './pages/Index';
 import ControllAccount from './admin/controllAccount';
 import ControllEvent from './admin/controllEvent';
 import Dashboard from './admin/dashboard';
-function HomePage() {
-  return (
-    <div>
-
-
-      <h1 style={{ padding: '40px', textAlign: 'center' }}>Trang Chủ</h1>
-    </div>
-  );
-}
+import ControllNews from './admin/controllNews';
+import News from './pages/News';
+import NewsDetail from "./pages/NewsDetail"; // đường dẫn phù hợp
 
 function App() {
   return (
@@ -36,6 +30,10 @@ function App() {
         <Route path="/admin/accounts" element={<ControllAccount />} />
         <Route path="/admin/events" element={<ControllEvent />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/news" element={<ControllNews />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
+
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />
