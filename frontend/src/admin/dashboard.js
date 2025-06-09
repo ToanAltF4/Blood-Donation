@@ -1,4 +1,3 @@
-import "./dashboard.css";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import ReactApexChart from "react-apexcharts";
