@@ -34,6 +34,8 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
 
+        <Route path="/regEvents" element={<Dashboard />} />
+
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />
