@@ -4,11 +4,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './component/Navbar/navbar'; // Import Navbar component
+import { GoogleOAuthProvider } from '@react-oauth/google'; // Import Google OAuth component
+const CLIENT_ID = "951760293428-im3hglj926cogi087ho6aj0e54m56l02.apps.googleusercontent.com";
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <GoogleOAuthProvider clientId={CLIENT_ID}>
+      <App />
+    </GoogleOAuthProvider>
   </React.StrictMode>
 );
 
