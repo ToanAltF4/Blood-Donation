@@ -132,3 +132,60 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: 'Lỗi server.' });
   }
 };
+
+
+exports.loginWithGoogle = async (req, res) => {
+  try {
+    const { googleId, fullName, email, avatar } = req.body;
+
+    if (!email || !fullName) {
+      return res.status(400).json({ message: 'Thiếu thông tin tài khoản Google.' });
+    }
+
+    // 1. Kiểm tra user
+    const [rows] = await sql.query('SELECT * FROM User WHERE Email = ?', [email]);
+    let user;
+
+    if (rows.length === 0) {
+      // 2. Chưa có thì tạo user mới
+      await sql.query(
+        'INSERT INTO User (Full_Name, Email, Role) VALUES (?, ?, ?)',
+        [fullName, email, 'Member']
+      );
+      const [newRows] = await sql.query('SELECT * FROM User WHERE Email = ?', [email]);
+      user = newRows[0];
+    } else {
+      user = rows[0];
+    }
+
+    // 3. Tạo token
+    const token = jwt.sign(
+      {
+        user_id: user.User_ID,
+        email: user.Email,
+        role: user.Role
+      },
+      jwtConfig.secret,
+      { expiresIn: jwtConfig.expiresIn }
+    );
+
+    // 4. Trả dữ liệu
+    return res.status(200).json({
+      message: 'Đăng nhập Google thành công.',
+      token,
+      role: user.Role,
+      user: {
+        user_id: user.User_ID,
+        full_name: user.Full_Name,
+        email: user.Email,
+        role: user.Role,
+        avatar: avatar,// Thêm avatar nếu có
+
+      }
+    });
+  } catch (error) {
+    console.error('Lỗi loginWithGoogle:', error);
+    return res.status(500).json({ message: 'Lỗi server.' });
+  }
+};
+
