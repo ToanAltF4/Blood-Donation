@@ -3,6 +3,8 @@ import "./style.css";
 import Navbar from "../component/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2"; // thêm dòng này
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode"; // Thêm import jwtDecode
 
 function LoginPage() {
   const HOST = process.env.REACT_APP_HOST;
@@ -59,6 +61,56 @@ function LoginPage() {
       Swal.fire("Lỗi máy chủ", "Vui lòng kiểm tra mạng hoặc thử lại.", "error");
     }
   };
+
+  const handleGoogleLogin = async (credentialResponse) => {
+  try {
+    const decoded = jwtDecode(credentialResponse.credential);
+
+    const response = await fetch('http://localhost:8000/api/auth/login-google', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        fullName: decoded.name,
+        email: decoded.email,
+        avatar: decoded.picture,
+      }),
+    });
+
+    if (response.status === 200) {
+      const data = await response.json();
+      const role = data.user.role;
+
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
+
+      Swal.fire({
+        title: "Đăng nhập Google thành công!",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1800,
+      });
+
+      setTimeout(() => {
+        if (role === "Admin") {
+          navigate("/admin/dashboard");
+        } else if (role === "Staff") {
+          navigate("/staff/page");
+        } else {
+          navigate("/");
+        }
+        window.location.reload();
+      }, 1800);
+    } else {
+      Swal.fire("Đăng nhập Google thất bại", "", "error");
+    }
+  } catch (error) {
+    console.error("Lỗi khi đăng nhập Google:", error);
+    Swal.fire("Lỗi máy chủ", "Vui lòng thử lại sau.", "error");
+  }
+};
+
 
   const handleForgotPasswordClick = () => {
     // Logic for handling forgot password can be added here
@@ -136,6 +188,17 @@ function LoginPage() {
             >
               Đăng Nhập
             </button>
+          </div>
+
+          <div className="text-center mb-3">
+            <span className="fw-bold text-muted">hoặc</span>
+          </div>
+
+          <div className="d-flex justify-content-center mb-3">
+            <GoogleLogin
+              onSuccess={handleGoogleLogin}
+              onError={(error) => console.error('Lỗi đăng nhập bằng Google:', error)}
+            />
           </div>
 
           <div className="text-center">
