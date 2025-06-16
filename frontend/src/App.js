@@ -34,6 +34,7 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
         
+        
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

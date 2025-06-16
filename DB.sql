@@ -88,6 +88,10 @@ CREATE TABLE History (
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
 );
 
+USE blooddonation;
+ALTER TABLE Post
+ADD COLUMN Post_Img VARCHAR(255) AFTER Post_ID;
+
 
 -- INSERT INTO User (
 --     Full_Name,
@@ -96,7 +100,7 @@ CREATE TABLE History (
 --     Email,
 --     Password,
 --     Role,
---     Blood,
+--     Blood,User
 --     Date_of_birth,
 --     Family_contact
 -- ) VALUES (
