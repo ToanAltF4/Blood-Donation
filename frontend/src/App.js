@@ -33,9 +33,7 @@ function App() {
         <Route path="/admin/news" element={<ControllNews />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
-
-        <Route path="/regEvents" element={<Dashboard />} />
-
+        
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

@@ -62,11 +62,14 @@ function LoginPage() {
     }
   };
 
+  const API_URL = window.location.hostname === "localhost"
+  ? "http://localhost:8000"
+  : "https://api.fpt.tokyo";
   const handleGoogleLogin = async (credentialResponse) => {
   try {
     const decoded = jwtDecode(credentialResponse.credential);
 
-    const response = await fetch('http://localhost:8000/api/auth/login-google', {
+    const response = await fetch(`${API_URL}/api/auth/login-google`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
