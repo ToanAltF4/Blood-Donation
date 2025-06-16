@@ -1,5 +1,6 @@
 import "./profile.css";
 import React, { useState } from "react";
+import Swal from 'sweetalert2';
 
 function UserProfile() {
   const user = JSON.parse(localStorage.getItem("user"));
@@ -24,36 +25,51 @@ function UserProfile() {
   };
 
   const handleSave = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.REACT_APP_HOST}/api/user/update`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formData),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        alert("Cập nhật thành công");
-
-        // ✅ Lưu lại user mới vào localStorage
-        localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.reload();
-        
-        setEditMode(false);
-      } else {
-        alert(`Cập nhật thất bại: ${data.message || response.statusText}`);
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_HOST}/api/user/update`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       }
-    } catch (error) {
-      console.error("Lỗi khi cập nhật:", error);
-      alert("Không thể kết nối tới máy chủ.");
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      // ✅ Hiển thị thông báo SweetAlert2
+      await Swal.fire({
+        icon: 'success',
+        title: 'Cập nhật thành công!',
+        text: 'Thông tin hồ sơ của bạn đã được lưu.',
+        confirmButtonText: 'OK'
+      });
+
+      // ✅ Lưu lại user mới vào localStorage
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      // Tải lại trang để hiển thị dữ liệu mới
+      window.location.reload();
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Thất bại',
+        text: data.message || response.statusText,
+      });
     }
-  };
+  } catch (error) {
+    console.error("Lỗi khi cập nhật:", error);
+    Swal.fire({
+      icon: 'error',
+      title: 'Lỗi kết nối',
+      text: 'Không thể kết nối tới máy chủ.',
+    });
+  }
+};
+
 
   const handleCancel = () => {
     setFormData({
