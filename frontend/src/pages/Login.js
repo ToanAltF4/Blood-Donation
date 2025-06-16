@@ -62,9 +62,7 @@ function LoginPage() {
     }
   };
 
-  const API_URL = window.location.hostname === "localhost"
-  ? "http://localhost:8000"
-  : "https://api.fpt.tokyo";
+  const API_URL = process.env.REACT_APP_HOST;
   const handleGoogleLogin = async (credentialResponse) => {
   try {
     const decoded = jwtDecode(credentialResponse.credential);
