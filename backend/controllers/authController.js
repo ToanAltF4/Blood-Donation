@@ -169,18 +169,21 @@ exports.loginWithGoogle = async (req, res) => {
       { expiresIn: jwtConfig.expiresIn }
     );
 
-    // 4. Trả dữ liệu
     return res.status(200).json({
-      message: 'Đăng nhập Google thành công.',
+      message: 'Đăng nhập thành công.',
       token,
-      role: user.Role,
+      role: user.Role, // ← quan trọng cho phía frontend
       user: {
         user_id: user.User_ID,
         full_name: user.Full_Name,
+        cccd: user.CCCD,
+        phone: user.Phone,
         email: user.Email,
+        location: user.Location,
         role: user.Role,
-        avatar: avatar,// Thêm avatar nếu có
-
+        blood: user.Blood,
+        date_of_birth: user.Date_of_birth,
+        family_contact: user.Family_contact
       }
     });
   } catch (error) {

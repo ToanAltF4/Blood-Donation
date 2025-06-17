@@ -25,8 +25,6 @@ router.put('/update', async (req, res) => {
     family_contact,
   } = req.body;
 
-  console.log("📥 Dữ liệu nhận được từ frontend:", req.body);
-
   if (!email) {
     return res.status(400).json({ message: 'Email là bắt buộc để xác định người dùng.' });
   }
@@ -49,7 +47,6 @@ router.put('/update', async (req, res) => {
       return res.status(404).json({ message: 'Không tìm thấy người dùng với email đã cung cấp.' });
     }
 
-    // 🔁 Truy vấn lại user đã cập nhật
     const [rows] = await sql.execute(`SELECT * FROM User WHERE Email = ?`, [email]);
     const updatedUser = rows[0];
 
