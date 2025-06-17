@@ -18,7 +18,7 @@ function UserProfile() {
     cccd: user.cccd,
     location: user.location,
     blood: user.blood,
-    date_of_birth: user.date_of_birth,
+    date_of_birth: user.date_of_birth.slice(0, 10),
     family_contact: user.family_contact,
   });
 
@@ -171,21 +171,13 @@ function UserProfile() {
                 />
               </div>
               <div className="info-row">
-                <label>Birthday</label>
+                <label>Birthday </label>
                 <input
-                  type="datetime-local"
+                  type="date"
+                  className="form-control"
                   name="date_of_birth"
-                  value={formatForDatetimeLocal(formData.date_of_birth)}
-                  onChange={(e) => {
-                    const raw = e.target.value; // "1995-06-18T07:00"
-                    const formatted = raw.replace("T", " ") + ":00"; // → "1995-06-18 07:00:00"
-
-                    setFormData((prev) => ({
-                      ...prev,
-                      date_of_birth: formatted, // ✅ lưu đúng định dạng DB và UTC+7
-                    }));
-                  }}
-                  onKeyDown={(e) => e.preventDefault()} // ✅ chặn nhập tay
+                  value={formData.date_of_birth?.slice(0, 10)} // chỉ lấy YYYY-MM-DD
+                  onChange={handleChange}
                 />
               </div>
 
