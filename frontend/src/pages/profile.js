@@ -18,7 +18,7 @@ function UserProfile() {
     cccd: user.cccd,
     location: user.location,
     blood: user.blood,
-    date_of_birth: user.date_of_birth.slice(0, 10),
+    date_of_birth: user.date_of_birth ? user.date_of_birth.slice(0, 10) : "",
     family_contact: user.family_contact,
   });
 
