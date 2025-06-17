@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import Navbar from '../component/Navbar/navbar';
-import './register.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import Navbar from "../component/Navbar/navbar";
+import "./register.css";
+import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 function RegisterPage() {
   const navigate = useNavigate();
@@ -9,23 +10,23 @@ function RegisterPage() {
 
   // Khai báo state cho các trường input
   const [formData, setFormData] = useState({
-    full_name: '',
-    cccd: '',
-    phone: '',
-    email: '',
-    password: '',
-    location: '', // địa chỉ
-    role: 'Member', // mặc định
-    blood: '',
-    date_of_birth: '',
-    family_contact: ''
+    full_name: "",
+    cccd: "",
+    phone: "",
+    email: "",
+    password: "",
+    location: "", // địa chỉ
+    role: "Member", // mặc định
+    blood: "",
+    date_of_birth: "",
+    family_contact: "",
   });
 
   // Hàm xử lý nhập liệu
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -35,32 +36,51 @@ function RegisterPage() {
 
     try {
       const response = await fetch(`${HOST}/api/auth/register`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
 
       if (response.status === 201) {
-        alert('Đăng ký thành công!');
-        // Bạn có thể chuyển hướng người dùng sau đăng ký
+        await Swal.fire({
+          icon: "success",
+          title: "Đăng ký thành công!",
+          confirmButtonText: "OK",
+        });
+        // Optionally chuyển hướng sau khi đăng ký
         // navigate('/login');
       } else if (response.status === 400) {
-        alert('Vui lòng nhập đầy đủ thông tin bắt buộc.');
+        await Swal.fire({
+          icon: "warning",
+          title: "Thiếu thông tin",
+          text: "Vui lòng nhập đầy đủ thông tin bắt buộc.",
+        });
       } else if (response.status === 409) {
-        alert('Đăng ký không thành công. Tài khoản có thể đã tồn tại.');
+        await Swal.fire({
+          icon: "error",
+          title: "Tài khoản đã tồn tại",
+          text: "Email, số điện thoại hoặc CCCD đã được đăng ký.",
+        });
       } else {
-        alert('Đã xảy ra lỗi không xác định.');
+        await Swal.fire({
+          icon: "error",
+          title: "Không hợp lệ",
+          text: "Người dùng phải từ 18 tuổi trở lên.",
+        });
       }
     } catch (error) {
-      console.error('Lỗi đăng ký:', error);
-      alert('Lỗi máy chủ hoặc kết nối mạng.');
+      console.error("Lỗi đăng ký:", error);
+      await Swal.fire({
+        icon: "error",
+        title: "Lỗi kết nối",
+        text: "Lỗi máy chủ hoặc kết nối mạng.",
+      });
     }
   };
 
   return (
-     
     <div
       className="d-flex min-vh-100"
       style={{
@@ -75,7 +95,9 @@ function RegisterPage() {
           style={{ width: "730px", height: "90%" }}
           onSubmit={handleRegister}
         >
-          <h2 className="text-center mb-4 fw-bold" style={{color:"#3D6889"}}>Đăng Ký</h2>
+          <h2 className="text-center mb-4 fw-bold" style={{ color: "#3D6889" }}>
+            Đăng Ký
+          </h2>
 
           <div className="row g-3">
             <div className="col-md-6">
@@ -201,7 +223,11 @@ function RegisterPage() {
           </div>
 
           <div className="d-grid mt-4">
-            <button type="submit" className="btn btn-primary rounded-pill fw-bold" style={{ backgroundColor: "#3D6889", color: "white" }}>
+            <button
+              type="submit"
+              className="btn btn-primary rounded-pill fw-bold"
+              style={{ backgroundColor: "#3D6889", color: "white" }}
+            >
               Đăng Ký
             </button>
           </div>
