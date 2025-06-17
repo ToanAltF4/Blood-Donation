@@ -15,7 +15,8 @@ import ControllEvent from './admin/controllEvent';
 import Dashboard from './admin/dashboard';
 import ControllNews from './admin/controllNews';
 import News from './pages/News';
-import NewsDetail from "./pages/NewsDetail"; // đường dẫn phù hợp
+import NewsDetail from "./pages/NewsDetail"; 
+import ChangePassword from './pages/ChangePassword'; 
 
 function App() {
   return (
@@ -33,7 +34,8 @@ function App() {
         <Route path="/admin/news" element={<ControllNews />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
-        
+        <Route path="/change-password" element={<ChangePassword />} />
+
         
         {/* Thêm các route khác nếu cần */}
       </Routes>

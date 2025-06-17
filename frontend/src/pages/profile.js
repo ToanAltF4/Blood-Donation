@@ -1,14 +1,14 @@
 import "./profile.css";
 import React, { useState } from "react";
 import Swal from "sweetalert2";
-function formatForDatetimeLocal(dbString) {
-  if (!dbString) return "";
-  return dbString.replace(" ", "T").slice(0, 16); // "YYYY-MM-DDTHH:mm"
-}
+import { useNavigate } from "react-router-dom";
+
+
 
 function UserProfile() {
   const user = JSON.parse(localStorage.getItem("user"));
-
+  const navigate = useNavigate();
+  
   const [editMode, setEditMode] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -110,7 +110,7 @@ function UserProfile() {
               <li>Sự Kiện Đã Đăng Ký</li>
               <li>Lịch Sử Hiến Máu</li>
               <li onClick={() => setEditMode(true)}>Cập Nhật Hồ Sơ</li>
-              <li className="logout">Logout</li>
+              <li onClick={() => navigate("/change-password")}>Đổi Mật Khẩu</li>
             </ul>
           </div>
         </div>
