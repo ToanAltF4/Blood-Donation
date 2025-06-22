@@ -10,4 +10,10 @@ router.post('/addEvent', authenticateToken, authorizeRoles('Admin','Staff'), adm
 router.post('/changeEvents' , authenticateToken, authorizeRoles('Admin','Staff'), adminController.changeEvent);
 router.post('/deleteEvents', authenticateToken, authorizeRoles('Admin','Staff'), adminController.deleteEvent);
 router.get('/getAllBloodBanks', authenticateToken, authorizeRoles('Admin'), adminController.getAllUnitOfBlood);
+
+// Routes for EventDetail
+router.get('/getEventById/:id', authenticateToken, authorizeRoles('Admin','Staff'), adminController.getEventById);
+router.get('/getDonorsByEvent/:id', authenticateToken, authorizeRoles('Admin','Staff'), adminController.getDonorsByEvent);
+router.post('/updateDonor', authenticateToken, authorizeRoles('Admin','Staff'), adminController.updateDonor);
+
 module.exports = router;

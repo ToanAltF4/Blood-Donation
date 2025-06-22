@@ -12,6 +12,7 @@ import UserProfile from './pages/profile';
 import Index from './pages/Index';
 import ControllAccount from './admin/controllAccount';
 import ControllEvent from './admin/controllEvent';
+import EventDetail from './admin/EventDetail';
 import Dashboard from './admin/dashboard';
 import ControllNews from './admin/controllNews';
 import News from './pages/News';
@@ -30,6 +31,7 @@ function App() {
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/admin/accounts" element={<ControllAccount />} />
         <Route path="/admin/events" element={<ControllEvent />} />
+        <Route path="/admin/event-detail/:id" element={<EventDetail />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/news" element={<ControllNews />} />
         <Route path="/news" element={<News />} />

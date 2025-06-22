@@ -6,11 +6,26 @@ import { FaEdit, FaArrowLeft } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useNavigate, useParams } from "react-router-dom";
 
+// ======================= MOCK DATA =======================
+const mockEvent = {
+  Event_ID: 1,
+  Event_Name: "Ngày hội hiến máu nhân đạo 2024",
+  Content:
+    "Đây là sự kiện hiến máu lớn nhất trong năm, nhằm kêu gọi cộng đồng chung tay vì một xã hội khỏe mạnh hơn. Mỗi giọt máu cho đi, một cuộc đời ở lại.",
+  Location: "Trung tâm Hội nghị Quốc gia, Hà Nội",
+  Time_Start: "2024-08-15T08:00:00",
+  Time_End: "2024-08-15T17:00:00",
+  Status: "Đang diễn ra",
+  Count_Reg: 5,
+};
+
+// ==========================================================
+
 function EventDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const HOST = process.env.REACT_APP_HOST;
-  
+
   const [event, setEvent] = useState(null);
   const [donors, setDonors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -37,25 +52,32 @@ function EventDetail() {
     }
 
     fetchEventDetail();
-  }, [id]);
+  }, [id, navigate]);
 
   const fetchEventDetail = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      
+
       // Fetch event details
-      const eventResponse = await axios.get(`${HOST}/api/admin/getEventById/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const eventResponse = await axios.get(
+        `${HOST}/api/admin/getEventById/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       // Fetch donors for this event
-      const donorsResponse = await axios.get(`${HOST}/api/admin/getDonorsByEvent/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const donorsResponse = await axios.get(
+        `${HOST}/api/admin/getDonorsByEvent/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setEvent(eventResponse.data);
       setDonors(donorsResponse.data);
@@ -67,31 +89,33 @@ function EventDetail() {
   };
 
   const handleEditDonor = (donor) => {
-    setEditingDonor(donor);
+    const donorToEdit = { ...donor };
+    if (!donorToEdit.Unit_Blood) {
+      donorToEdit.Unit_Blood = donorToEdit.DefaultBloodGroup;
+    }
+    setEditingDonor(donorToEdit);
     setShowEditModal(true);
   };
 
   const handleUpdateDonor = async () => {
     try {
       const token = localStorage.getItem("token");
-      await axios.post(
-        `${HOST}/api/admin/updateDonor`,
-        editingDonor,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      await axios.post(`${HOST}/api/admin/updateDonor`, editingDonor, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // Update local state
-      setDonors(prev => prev.map(d => 
-        d.Blood_ID === editingDonor.Blood_ID ? editingDonor : d
-      ));
+      setDonors((prev) =>
+        prev.map((d) =>
+          d.Blood_ID === editingDonor.Blood_ID ? editingDonor : d
+        )
+      );
 
       setShowEditModal(false);
       setEditingDonor(null);
-      
+
       Swal.fire({
         icon: "success",
         title: "Cập nhật thành công!",
@@ -114,48 +138,32 @@ function EventDetail() {
       name: "Tên người hiến",
       selector: (row) => row.Full_Name,
       sortable: true,
-      width: "200px",
-    },
-    {
-      name: "Ngày sinh",
-      selector: (row) => row.Date_of_birth,
-      cell: (row) => formatDate(row.Date_of_birth),
-      width: "120px",
+      grow: 2,
     },
     {
       name: "Số điện thoại",
       selector: (row) => row.Phone,
-      width: "130px",
     },
     {
       name: "Email",
       selector: (row) => row.Email,
-      width: "200px",
-    },
-    {
-      name: "Địa chỉ",
-      selector: (row) => row.Location,
-      width: "150px",
+      grow: 2,
     },
     {
       name: "Nhóm máu",
       selector: (row) => row.Unit_Blood,
-      width: "100px",
     },
     {
-      name: "Dung tích (ml)",
+      name: "Dung tích",
       selector: (row) => row.Volume,
-      width: "120px",
     },
     {
       name: "Hồng cầu",
       selector: (row) => row.Red_Blood_Cells,
-      width: "100px",
     },
     {
       name: "Tiểu cầu",
       selector: (row) => row.Platelets,
-      width: "100px",
     },
     {
       name: "Trạng thái",
@@ -167,19 +175,26 @@ function EventDetail() {
             borderRadius: "12px",
             fontSize: "12px",
             fontWeight: "bold",
-            backgroundColor: 
-              row.Status === "Pending" ? "#ffc107" :
-              row.Status === "Completed" ? "#28a745" :
-              row.Status === "Cancelled" ? "#dc3545" : "#6c757d",
+            backgroundColor:
+              row.Status === "pending"
+                ? "#ffc107"
+                : row.Status === "approved"
+                ? "#28a745"
+                : row.Status === "rejected"
+                ? "#dc3545"
+                : "#6c757d",
             color: "white",
           }}
         >
-          {row.Status === "Pending" ? "Chờ xử lý" :
-           row.Status === "Completed" ? "Hoàn thành" :
-           row.Status === "Cancelled" ? "Đã hủy" : row.Status}
+          {row.Status === "pending"
+            ? "Chờ xử lý"
+            : row.Status === "approved"
+            ? "Đã duyệt"
+            : row.Status === "rejected"
+            ? "Đã từ chối"
+            : row.Status}
         </span>
       ),
-      width: "120px",
     },
     {
       name: "Action",
@@ -190,7 +205,6 @@ function EventDetail() {
           title="Cập nhật thông tin"
         />
       ),
-      width: "80px",
     },
   ];
 
@@ -240,7 +254,7 @@ function EventDetail() {
     <div className="container-fluid py-4">
       <div className="container">
         {/* Header */}
-        <div className="d-flex justify-content-between align-items-center mb-4">
+        <div className="d-flex align-items-center mb-4">
           <button
             className="btn btn-outline-secondary"
             onClick={() => navigate("/admin/events")}
@@ -248,47 +262,27 @@ function EventDetail() {
             <FaArrowLeft className="me-2" />
             Quay lại
           </button>
-          <h2 className="mb-0">Chi tiết sự kiện</h2>
+          <h2 className="mb-0 flex-grow-1 text-center">{event.Event_Name}</h2>
         </div>
 
         {/* Event Information */}
         <div className="card mb-4">
-          <div className="card-header">
-            <h4 className="mb-0">{event.Event_Name}</h4>
-          </div>
           <div className="card-body">
             <div className="row">
-              <div className="col-md-8">
+              <div className="col-md-7">
+                <p className="fw-bold fs-4 text-dark">{event.Name_Event}</p>
+              </div>
+              <div className="col-md-7">
+                <h5>Mô tả sự kiện</h5>
                 <p className="text-muted">{event.Content}</p>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-5">
+                <h5>Thông tin chi tiết</h5>
                 <div className="row">
-                  <div className="col-6">
+                  <div className="col-12 mb-2">
                     <strong>Địa điểm:</strong>
-                    <p>{event.Location}</p>
+                    <p className="mb-0">{event.Location}</p>
                   </div>
-                  <div className="col-6">
-                    <strong>Trạng thái:</strong>
-                    <p>
-                      <span
-                        style={{
-                          padding: "4px 8px",
-                          borderRadius: "12px",
-                          fontSize: "12px",
-                          fontWeight: "bold",
-                          backgroundColor: 
-                            event.Status === "Sắp diễn ra" ? "#007bff" :
-                            event.Status === "Đang diễn ra" ? "#dc3545" :
-                            event.Status === "Đã kết thúc" ? "#28a745" : "#6c757d",
-                          color: "white",
-                        }}
-                      >
-                        {event.Status}
-                      </span>
-                    </p>
-                  </div>
-                </div>
-                <div className="row">
                   <div className="col-6">
                     <strong>Bắt đầu:</strong>
                     <p>{formatDatetime(event.Time_Start)}</p>
@@ -296,6 +290,30 @@ function EventDetail() {
                   <div className="col-6">
                     <strong>Kết thúc:</strong>
                     <p>{formatDatetime(event.Time_End)}</p>
+                  </div>
+                  <div className="col-12">
+                    <strong>Trạng thái:</strong>
+                    <p>
+                      <span
+                        style={{
+                          padding: "4px 10px",
+                          borderRadius: "12px",
+                          fontSize: "14px",
+                          fontWeight: "bold",
+                          backgroundColor:
+                            event.Status === "Sắp diễn ra"
+                              ? "#007bff"
+                              : event.Status === "Đang diễn ra"
+                              ? "#dc3545"
+                              : event.Status === "Đã kết thúc"
+                              ? "#28a745"
+                              : "#6c757d",
+                          color: "white",
+                        }}
+                      >
+                        {event.Status}
+                      </span>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -327,11 +345,17 @@ function EventDetail() {
 
         {/* Edit Modal */}
         {showEditModal && editingDonor && (
-          <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: "rgba(0,0,0,0.4)" }}>
+          <div
+            className="modal fade show d-block w-100 vh-100"
+            tabIndex="-1"
+            style={{ backgroundColor: "rgba(0,0,0,0.4)" }}
+          >
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className="modal-header">
-                  <h5 className="modal-title">Cập nhật thông tin người hiến máu</h5>
+                  <h5 className="modal-title">
+                    Cập nhật thông tin người hiến máu
+                  </h5>
                   <button
                     type="button"
                     className="btn-close"
@@ -355,7 +379,10 @@ function EventDetail() {
                         className="form-select"
                         value={editingDonor.Unit_Blood || ""}
                         onChange={(e) =>
-                          setEditingDonor({ ...editingDonor, Unit_Blood: e.target.value })
+                          setEditingDonor({
+                            ...editingDonor,
+                            Unit_Blood: e.target.value,
+                          })
                         }
                       >
                         <option value="">Chọn nhóm máu</option>
@@ -377,7 +404,10 @@ function EventDetail() {
                         className="form-select"
                         value={editingDonor.Volume || ""}
                         onChange={(e) =>
-                          setEditingDonor({ ...editingDonor, Volume: parseInt(e.target.value) })
+                          setEditingDonor({
+                            ...editingDonor,
+                            Volume: parseInt(e.target.value),
+                          })
                         }
                       >
                         <option value="">Chọn dung tích</option>
@@ -389,14 +419,17 @@ function EventDetail() {
                       <label className="form-label">Trạng thái:</label>
                       <select
                         className="form-select"
-                        value={editingDonor.Status || "Pending"}
+                        value={editingDonor.Status || "pending"}
                         onChange={(e) =>
-                          setEditingDonor({ ...editingDonor, Status: e.target.value })
+                          setEditingDonor({
+                            ...editingDonor,
+                            Status: e.target.value,
+                          })
                         }
                       >
-                        <option value="Pending">Chờ xử lý</option>
-                        <option value="Completed">Hoàn thành</option>
-                        <option value="Cancelled">Đã hủy</option>
+                        <option value="pending">Chờ xử lý</option>
+                        <option value="approved">Duyệt</option>
+                        <option value="rejected">Từ chối</option>
                       </select>
                     </div>
                   </div>
@@ -407,7 +440,10 @@ function EventDetail() {
                         className="form-select"
                         value={editingDonor.Red_Blood_Cells || ""}
                         onChange={(e) =>
-                          setEditingDonor({ ...editingDonor, Red_Blood_Cells: e.target.value })
+                          setEditingDonor({
+                            ...editingDonor,
+                            Red_Blood_Cells: e.target.value,
+                          })
                         }
                       >
                         <option value="">Chọn trạng thái</option>
@@ -422,7 +458,10 @@ function EventDetail() {
                         className="form-select"
                         value={editingDonor.Platelets || ""}
                         onChange={(e) =>
-                          setEditingDonor({ ...editingDonor, Platelets: e.target.value })
+                          setEditingDonor({
+                            ...editingDonor,
+                            Platelets: e.target.value,
+                          })
                         }
                       >
                         <option value="">Chọn trạng thái</option>
@@ -440,8 +479,8 @@ function EventDetail() {
                   >
                     Cập nhật
                   </button>
-                  <button 
-                    className="btn btn-secondary" 
+                  <button
+                    className="btn btn-secondary"
                     onClick={() => setShowEditModal(false)}
                   >
                     Hủy
