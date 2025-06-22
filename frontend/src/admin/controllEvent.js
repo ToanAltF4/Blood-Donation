@@ -3,7 +3,7 @@ import DataTable from "react-data-table-component";
 import Swal from "sweetalert2";
 import axios from "axios";
 import "./controllEvent.css";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 
@@ -144,6 +144,11 @@ function ControllEvent() {
       name: "Action",
       cell: (row) => (
         <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <FaEye
+            onClick={() => navigate(`/admin/event-detail/${row.Event_ID}`)}
+            style={{ cursor: "pointer", color: "#007bff" }}
+            title="Xem chi tiết"
+          />
           <FaEdit
             onClick={() => handleEdit(row)}
             style={{ cursor: "pointer", color: "black" }}
@@ -154,7 +159,7 @@ function ControllEvent() {
           />
         </div>
       ),
-      width: "100px",
+      width: "120px",
     },
   ];
   const filteredEvents = events.filter((event) => {
