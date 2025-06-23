@@ -18,6 +18,9 @@ import ControllNews from './admin/controllNews';
 import News from './pages/News';
 import NewsDetail from "./pages/NewsDetail"; 
 import ChangePassword from './pages/ChangePassword'; 
+import ForgotPassword from './pages/ForgotPassword';
+import VerifyOTP from './pages/VerifyOTP';
+import ResetPassword from './pages/ResetPassword';
 
 function App() {
   return (
@@ -37,6 +40,9 @@ function App() {
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/change-password" element={<ChangePassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/verify-otp" element={<VerifyOTP />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         
         {/* Thêm các route khác nếu cần */}

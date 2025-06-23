@@ -114,10 +114,7 @@ function LoginPage() {
 
 
   const handleForgotPasswordClick = () => {
-    // Logic for handling forgot password can be added here
-    alert(
-      "Gửi SMS với cú pháp QUENMK bằng sdt đã đăng ký thành viên đến 0868396721."
-    );
+    navigate("/forgot-password");
   };
   const handleNavigateRegister = () => {
     navigate("/register");
