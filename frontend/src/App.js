@@ -24,6 +24,7 @@ import ResetPassword from './pages/ResetPassword';
 import RegisterEvent from './pages/RegisterEvent';
 import MyEventRegistrations from './pages/MyEventRegistrations';
 import MyDonationHistory from './pages/MyDonationHistory';
+import StaffBloodBank from './pages/StaffBloodBank';
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
         <Route path="/register-event" element={<RegisterEvent />} />
         <Route path="/my-registrations" element={<MyEventRegistrations />} />
         <Route path="/my-donation-history" element={<MyDonationHistory />} />
+        <Route path="/staff/blood-bank" element={<StaffBloodBank />} />
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

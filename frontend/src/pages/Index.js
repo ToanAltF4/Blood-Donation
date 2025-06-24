@@ -137,7 +137,7 @@ const faqList = [
   {
     question: "Khi tôi cần máu khẩn cấp thì làm gì?",
     answer:
-      "Bạn có thể gọi ngay tổng đài hỗ trợ khẩn cấp 1900 868 638 hoặc truy cập ứng dụng để gửi yêu cầu khẩn cấp. Hệ thống sẽ tự động kết nối với các người hiến phù hợp.",
+      "Bạn có thể gọi ngay tổng đài hỗ trợ khẩn cấp 0868396721 hoặc truy cập website để gửi yêu cầu khẩn cấp. Hệ thống sẽ tự động kết nối với các người hiến phù hợp.",
   },
   {
     question: "Có vết bầm nhẹ sau khi hiến máu, tôi nên làm gì?",
@@ -200,12 +200,12 @@ function Index() {
         className="home-page"
         style={{
           backgroundImage: "url(/img/background.svg)",
-          minHeight: "100vh",
+          minHeight: "100vh"
         }}
       >
         {/* Nút Đăng ký ngay cho member */}
         {isMember && (
-          <div style={{ position: "absolute", top: "60vh", left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+          <div style={{ position: "absolute", top: "98vh", left: 0, right: 1600, display: "flex", justifyContent: "center" }}>
             <button
               className="btn btn-danger btn-lg fw-bold shadow"
               style={{ borderRadius: 30, padding: "16px 48px", fontSize: 28 }}
@@ -411,7 +411,7 @@ function Index() {
               />
             </div>
             <p className="contact-info">
-              <strong>FPT UNIVERSITY</strong>
+              <strong>LECTURER</strong>
             </p>
             <p className="contact-info">
               <strong>TON THAT HOANG MINH</strong> minhtth5@fpt.edu.vn

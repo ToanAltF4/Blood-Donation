@@ -9,5 +9,7 @@ router.post('/register-event', authenticateToken, memberController.registerEvent
 router.get('/my-registrations', authenticateToken, memberController.getMyRegistrations);
 // Lấy lịch sử hiến máu
 router.get('/my-donation-history', authenticateToken, memberController.getMyDonationHistory);
+// Lấy tất cả sự kiện cho member
+router.get('/events', authenticateToken, memberController.getAllEventsForMember);
 
 module.exports = router; 

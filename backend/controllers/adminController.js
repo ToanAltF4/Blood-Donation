@@ -292,11 +292,15 @@ exports.updateDonor = async (req, res) => {
                 SET Unit_Blood = ?, Volume = ?, Red_Blood_Cells = ?, Platelets = ?, Donate_Time = NOW()
                 WHERE Blood_ID = ?
             `, [Unit_Blood, Volume, Red_Blood_Cells, Platelets, bloodId]);
+            // Cập nhật blood cho user
+            await sql.query(`UPDATE User SET Blood = ? WHERE User_ID = ?`, [Unit_Blood, User_ID]);
         } else {
             await sql.query(`
                 INSERT INTO Unit_of_Blood (User_ID, Event_ID, Unit_Blood, Volume, Red_Blood_Cells, Platelets, Donate_Time, Used_Status)
                 VALUES (?, ?, ?, ?, ?, ?, NOW(), 0)
             `, [User_ID, Event_ID, Unit_Blood, Volume, Red_Blood_Cells, Platelets]);
+            // Cập nhật blood cho user
+            await sql.query(`UPDATE User SET Blood = ? WHERE User_ID = ?`, [Unit_Blood, User_ID]);
         }
     }
 

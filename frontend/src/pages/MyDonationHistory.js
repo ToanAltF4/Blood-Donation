@@ -32,31 +32,56 @@ function MyDonationHistory() {
     }
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    return d.toLocaleDateString("vi-VN");
+  };
+
   const columns = [
-    { name: "Tên sự kiện", selector: (row) => row.Event_Name, grow: 2 },
-    { name: "Ngày hiến", selector: (row) => row.Donate_Time },
-    { name: "Nhóm máu", selector: (row) => row.Unit_Blood },
-    { name: "Dung tích", selector: (row) => row.Volume },
-    { name: "Hồng cầu", selector: (row) => row.Red_Blood_Cells },
-    { name: "Tiểu cầu", selector: (row) => row.Platelets },
+    { name: "Tên sự kiện", selector: (row) => row.Event_Name, grow: 2, wrap: true },
+    { name: "Ngày hiến", selector: (row) => formatDate(row.Donate_Time), width: "130px", wrap: true },
+    { name: "Nhóm máu", selector: (row) => row.Unit_Blood, wrap: true },
+    { name: "Dung tích", selector: (row) => row.Volume, wrap: true },
+    { name: "Hồng cầu", selector: (row) => row.Red_Blood_Cells, wrap: true },
+    { name: "Tiểu cầu", selector: (row) => row.Platelets, wrap: true },
+    
     {
-      name: "Trạng thái sử dụng",
+      name: "Trạng thái",
       selector: (row) => row.Used_Status,
       cell: (row) => (
         <span
           style={{
+            display: "inline-block",
+            width: 140,
+            textAlign: "center",
+            whiteSpace: "nowrap",
             padding: "4px 10px",
             borderRadius: "12px",
             fontWeight: "bold",
-            backgroundColor: row.Used_Status === 0 ? "#007bff" : "#28a745",
+            backgroundColor:
+              row.Used_Status === 0 ? "#007bff"
+              : row.Used_Status === 1 ? "#28a745"
+              : row.Used_Status === 2 ? "#dc3545"
+              : "#6c757d",
             color: "white",
           }}
         >
-          {row.Used_Status === 0 ? "Đang lưu kho" : "Đã sử dụng"}
+          {row.Used_Status === 0 ? "Đang lưu kho"
+          : row.Used_Status === 1 ? "Đã sử dụng"
+          : row.Used_Status === 2 ? "Đã hủy"
+          : "Trạng thái không xác định"}
         </span>
       ),
+      wrap: true,
     },
   ];
+
+  const customStyles = {
+    rows: { style: { fontSize: "18px" } },
+    headCells: { style: { fontSize: "20px", fontWeight: "bold" } },
+    cells: { style: { fontSize: "18px" } },
+  };
 
   return (
     <div className="container py-4">
@@ -69,6 +94,7 @@ function MyDonationHistory() {
           pagination
           highlightOnHover
           striped
+          customStyles={customStyles}
           noDataComponent="Bạn chưa có lịch sử hiến máu nào."
         />
       </div>

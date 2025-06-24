@@ -51,11 +51,14 @@ function Dashboard() {
         const data = response.data;
         setBloodUnits(data);
 
-        const mapped = data.map((item) => ({
+        // Sắp xếp theo thời gian hiến máu mới nhất
+        const sorted = [...data].sort((a, b) => new Date(b.Donate_Time) - new Date(a.Donate_Time));
+        const mapped = sorted.map((item) => ({
           name: item.Full_Name,
           phone: item.Phone,
           event: item.Event_Name || "Không rõ",
           blood: item.Unit_Blood,
+          donateTime: item.Donate_Time,
         }));
         setRecentDonations(mapped);
       } catch (error) {
@@ -141,6 +144,7 @@ function Dashboard() {
     { name: "Sự kiện", selector: (row) => row.event },
     { name: "SĐT", selector: (row) => row.phone },
     { name: "Unit", selector: (row) => row.blood, width: "80px" },
+    { name: "Ngày", selector: (row) => new Date(row.donateTime).toLocaleDateString('vi-VN'), width: "120px" },
   ];
   const totalDonations = bloodUnits.length;
 

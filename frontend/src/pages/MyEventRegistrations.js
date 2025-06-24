@@ -32,17 +32,28 @@ function MyEventRegistrations() {
     }
   };
 
+  // Hàm format ngày tháng năm
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    return d.toLocaleDateString("vi-VN");
+  };
+
   const columns = [
-    { name: "Tên sự kiện", selector: (row) => row.Event_Name, grow: 2 },
-    { name: "Địa điểm", selector: (row) => row.Location, grow: 2 },
-    { name: "Bắt đầu", selector: (row) => row.Time_Start },
-    { name: "Kết thúc", selector: (row) => row.Time_End },
+    { name: "Tên sự kiện", selector: (row) => row.Event_Name, grow: 2, wrap: true },
+    { name: "Địa điểm", selector: (row) => row.Location, grow: 3, wrap: true },
+    { name: "Bắt đầu", selector: (row) => formatDate(row.Time_Start), width: "130px", wrap: true },
+    { name: "Kết thúc", selector: (row) => formatDate(row.Time_End), width: "130px", wrap: true },
     {
-      name: "Trạng thái đăng ký",
+      name: "Trạng thái",
       selector: (row) => row.Status,
       cell: (row) => (
         <span
           style={{
+            display: "inline-block",
+            width: 140,
+            textAlign: "center",
+            whiteSpace: "nowrap",
             padding: "4px 10px",
             borderRadius: "12px",
             fontWeight: "bold",
@@ -58,16 +69,23 @@ function MyEventRegistrations() {
           }}
         >
           {row.Status === "pending"
-            ? "Chờ xử lý"
+            ? "Chưa Hiến"
             : row.Status === "approved"
-            ? "Đã duyệt"
+            ? "Đã Hiến Máu"
             : row.Status === "rejected"
-            ? "Đã từ chối"
+            ? "Đã Hủy"
             : row.Status}
         </span>
       ),
+      wrap: true,
     },
   ];
+
+  const customStyles = {
+    rows: { style: { fontSize: "18px" } },
+    headCells: { style: { fontSize: "20px", fontWeight: "bold" } },
+    cells: { style: { fontSize: "18px" } },
+  };
 
   return (
     <div className="container py-4">
@@ -80,6 +98,7 @@ function MyEventRegistrations() {
           pagination
           highlightOnHover
           striped
+          customStyles={customStyles}
           noDataComponent="Bạn chưa đăng ký sự kiện nào."
         />
       </div>

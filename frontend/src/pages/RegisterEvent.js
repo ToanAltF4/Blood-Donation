@@ -11,6 +11,13 @@ function RegisterEvent() {
   const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("user"));
 
+  // Format ngày tháng năm
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const d = new Date(dateString);
+    return d.toLocaleDateString("vi-VN");
+  };
+
   useEffect(() => {
     if (!user || user.role !== "Member") {
       navigate("/");
@@ -22,7 +29,7 @@ function RegisterEvent() {
   const fetchEvents = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(`${HOST}/api/admin/getAllEvents`, {
+      const response = await axios.get(`${HOST}/api/member/events`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEvents(response.data);
@@ -33,18 +40,16 @@ function RegisterEvent() {
     }
   };
 
-  // Kiểm tra thông tin cá nhân bắt buộc
+  // Kiểm tra thông tin cá nhân bắt buộc (dùng key viết thường)
   const isUserInfoComplete = (user) => {
     if (!user) return false;
     const requiredFields = [
-      "Full_Name",
-      "CCCD",
-      "Phone",
-      "Email",
-      "Location",
-      "Blood",
-      "Date_of_birth",
-      "Family_contact",
+      "full_name",
+      "cccd",
+      "phone",
+      "email",
+      "location",
+      "date_of_birth",
     ];
     return requiredFields.every((field) => user[field] && user[field].toString().trim() !== "");
   };
@@ -84,11 +89,11 @@ function RegisterEvent() {
   };
 
   const columns = [
-    { name: "Tên sự kiện", selector: (row) => row.Event_Name, grow: 2 },
-    { name: "Địa điểm", selector: (row) => row.Location, grow: 2 },
-    { name: "Bắt đầu", selector: (row) => row.Time_Start },
-    { name: "Kết thúc", selector: (row) => row.Time_End },
-    { name: "Trạng thái", selector: (row) => row.Status },
+    { name: "Tên sự kiện", selector: (row) => row.Name_Event || row.Event_Name, grow: 2, wrap: true },
+    { name: "Địa điểm", selector: (row) => row.Location, grow: 3, wrap: true },
+    { name: "Bắt đầu", selector: (row) => formatDate(row.Time_Start), width: "130px", wrap: true },
+    { name: "Kết thúc", selector: (row) => formatDate(row.Time_End), width: "130px", wrap: true },
+    { name: "Trạng thái", selector: (row) => row.Status, wrap: true },
     {
       name: "Action",
       cell: (row) => (
@@ -102,8 +107,18 @@ function RegisterEvent() {
       ignoreRowClick: true,
       allowOverflow: true,
       button: true,
+      wrap: true,
     },
   ];
+
+  // Lọc sự kiện chưa kết thúc
+  const availableEvents = events.filter(e => e.Status !== "Đã kết thúc");
+
+  const customStyles = {
+    rows: { style: { fontSize: "18px" } },
+    headCells: { style: { fontSize: "20px", fontWeight: "bold" } },
+    cells: { style: { fontSize: "18px" } },
+  };
 
   return (
     <div className="container py-4">
@@ -111,11 +126,12 @@ function RegisterEvent() {
       <div className="card p-3 shadow">
         <DataTable
           columns={columns}
-          data={events}
+          data={availableEvents}
           progressPending={loading}
           pagination
           highlightOnHover
           striped
+          customStyles={customStyles}
           noDataComponent="Không có sự kiện nào."
         />
       </div>

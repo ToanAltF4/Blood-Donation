@@ -8,6 +8,25 @@ exports.registerEvent = async (req, res) => {
     // Kiểm tra đã đăng ký chưa
     const [exist] = await sql.query('SELECT * FROM List_Reg WHERE User_ID = ? AND Event_ID = ?', [userId, Event_ID]);
     if (exist.length > 0) return res.status(409).json({ message: 'Bạn đã đăng ký sự kiện này.' });
+
+    // Kiểm tra ngày hiến máu gần nhất
+    const [lastDonation] = await sql.query(`
+      SELECT Donate_Time FROM Unit_of_Blood
+      WHERE User_ID = ?
+      ORDER BY Donate_Time DESC
+      LIMIT 1
+    `, [userId]);
+    if (lastDonation.length > 0 && lastDonation[0].Donate_Time) {
+      const lastDate = new Date(lastDonation[0].Donate_Time);
+      const now = new Date();
+      const diffDays = Math.floor((now - lastDate) / (1000 * 60 * 60 * 24));
+      if (diffDays < 90) {
+        return res.status(400).json({
+          message: `Thời gian nghỉ ngơi tối thiểu giữa các lần hiến máu là 3 tháng. Bạn đã hiến máu ngày ${lastDate.toLocaleDateString('vi-VN')}. Vui lòng quay lại sau khi đủ thời gian nghỉ ngơi.`
+        });
+      }
+    }
+
     // Đăng ký mới
     await sql.query('INSERT INTO List_Reg (User_ID, Event_ID, Status) VALUES (?, ?, ?)', [userId, Event_ID, 'pending']);
     return res.status(201).json({ message: 'Đăng ký thành công.' });
@@ -47,5 +66,14 @@ exports.getMyDonationHistory = async (req, res) => {
     return res.status(200).json(rows);
   } catch (error) {
     return res.status(500).json({ message: 'Lỗi server.' });
+  }
+};
+
+exports.getAllEventsForMember = async (req, res) => {
+  try {
+    const [rows] = await sql.query("SELECT * FROM Event ORDER BY Time_Start DESC");
+    return res.status(200).json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Lỗi server." });
   }
 }; 

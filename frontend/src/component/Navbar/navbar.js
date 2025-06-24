@@ -84,13 +84,13 @@ function Navbar() {
           <>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/profile/events")}
+              onClick={() => navigate("/my-registrations")}
             >
               Sự kiện đã đăng ký
             </div>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/profile/history")}
+              onClick={() => navigate("/my-donation-history")}
             >
               Lịch sử hiến máu
             </div>
@@ -148,7 +148,7 @@ function Navbar() {
       <div className="bg-white py-2 border-bottom d-flex justify-content-between align-items-center px-5">
         <div className="text-muted">
           <div>Hotline Khẩn Cấp</div>
-          <strong className="text-dark">1900 868 638</strong>
+          <strong className="text-dark">0868 396 721</strong>
         </div>
 
         <div>

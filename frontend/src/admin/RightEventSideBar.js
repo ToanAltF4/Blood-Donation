@@ -15,11 +15,8 @@ function RightEventSidebar({ HOST }) {
           },
         });
 
-        const filtered = response.data.filter((e) =>
-          ["Sắp diễn ra", "Đang diễn ra"].includes(e.Status)
-        );
-
-        setEvents(filtered);
+        const sorted = response.data.sort((a, b) => new Date(b.Time_Start) - new Date(a.Time_Start));
+        setEvents(sorted);
       } catch (error) {
         console.error("Lỗi khi lấy sự kiện:", error);
       }
