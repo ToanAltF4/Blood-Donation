@@ -28,7 +28,6 @@ app.use('/api/forgot', forgotPasswordRoutes);
 
 
 
-
 app.get('/', (req, res) => {
   res.send('Backend is working!');
 });

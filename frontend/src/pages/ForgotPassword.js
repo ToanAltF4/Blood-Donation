@@ -7,12 +7,26 @@ function ForgotPassword() {
   const HOST = process.env.REACT_APP_HOST;
   const navigate = useNavigate();
 
+  const [isSending, setIsSending] = useState(false);
+  const validateEmail = (email) => {
+  // Định dạng email cơ bản
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+};
+
   const handleSendOTP = async () => {
     if (!email) {
       Swal.fire('Vui lòng nhập email', '', 'warning');
       return;
     }
-
+    if (!validateEmail(email)) {
+    Swal.fire('Email không hợp lệ', '', 'warning');
+    return;
+  }
+  if (isSending) {
+    Swal.fire('Vui lòng chờ trước khi gửi lại OTP', '', 'info');
+    return;
+  }
+    setIsSending(true);
     try {
       const res = await fetch(`${HOST}/api/forgot/forgot-password`, {
         method: 'POST',
@@ -23,10 +37,10 @@ function ForgotPassword() {
       const result = await res.json();
 
       if (res.status === 200) {
-        // ✅ Tính thời gian hết hạn 5 phút
+        // Tính thời gian hết hạn 5 phút
         const expiresAt = Date.now() + 5 * 60 * 1000;
 
-        // ✅ Lưu thông tin vào localStorage
+        // Lưu thông tin vào localStorage
         localStorage.setItem('reset-email', email);
         localStorage.setItem('reset-otp-token', result.otp);        // mã OTP 6 số
         localStorage.setItem('reset-otp-expire', expiresAt);        // thời hạn OTP
@@ -39,6 +53,9 @@ function ForgotPassword() {
     } catch (err) {
       console.error(err);
       Swal.fire('Lỗi máy chủ', '', 'error');
+    } finally {
+    // Chặn gửi lại OTP trong 60s
+    setTimeout(() => setIsSending(false), 60000);
     }
   };
 
@@ -75,6 +92,7 @@ function ForgotPassword() {
               className="btn rounded-pill fw-bold"
               style={{ backgroundColor: "#3D6889", color: "white" }}
               onClick={handleSendOTP}
+              disabled={isSending}
             >
               Gửi OTP
             </button>

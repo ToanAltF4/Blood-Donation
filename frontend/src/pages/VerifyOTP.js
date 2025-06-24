@@ -6,28 +6,24 @@ function VerifyOTP() {
   const [enteredOtp, setEnteredOtp] = useState('');
   const HOST = process.env.REACT_APP_HOST;
   const navigate = useNavigate();
-
+  
   useEffect(() => {
     const otpStored = localStorage.getItem('reset-otp-token');
     const email = localStorage.getItem('reset-email');
-    if (!otpStored || !email) {
+    if (!otpStored || !email ) {
       navigate('/forgot-password');
     }
   }, [navigate]);
 
   const handleVerify = async () => {
     const email = localStorage.getItem('reset-email');
-    const otpStored = localStorage.getItem('reset-otp-token');
-    const expiresAt = localStorage.getItem('reset-otp-expire');
 
     if (!enteredOtp) {
       Swal.fire('Vui lòng nhập mã OTP', '', 'warning');
       return;
     }
-
-    // (Tùy chọn) Kiểm tra hết hạn ở FE trước
-    if (expiresAt && Date.now() > Number(expiresAt)) {
-      Swal.fire('Mã OTP đã hết hạn', 'Vui lòng yêu cầu lại OTP.', 'error');
+    if (enteredOtp.length !== 6) {
+      Swal.fire('Mã OTP phải có 6 chữ số', '', 'warning');
       return;
     }
 
@@ -38,11 +34,9 @@ function VerifyOTP() {
         body: JSON.stringify({
           email,
           enteredOtp,
-          otpStored,
-          expiresAt,
+
         }),
       });
-
       const data = await res.json();
 
       if (res.status === 200) {
@@ -50,7 +44,11 @@ function VerifyOTP() {
         localStorage.setItem('otp-verified', 'true'); // dấu xác minh để reset-password
         navigate('/reset-password');
       } else {
-        Swal.fire('Xác minh thất bại', data.message || '', 'error');
+        Swal.fire('Xác minh thất bại', data.message || '', 'error').then(() => {
+           if (data.message && data.message.includes('hết hạn')) {
+             navigate('/forgot-password');
+           }
+        });
       }
     } catch (err) {
       console.error(err);
@@ -93,6 +91,7 @@ function VerifyOTP() {
             >
               Xác nhận
             </button>
+            
           </div>
         </div>
       </div>
