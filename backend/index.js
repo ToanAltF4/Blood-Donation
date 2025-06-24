@@ -11,6 +11,7 @@ const newsRoutes = require('./routes/news');
 const adminRoutes = require('./routes/admin');
 const userProfileRoutes = require('./routes/userProfile');
 const forgotPasswordRoutes = require('./routes/forgotPassword');
+const memberRoutes = require('./routes/member');
 
 app.use(express.json());
 app.use(cors());
@@ -20,13 +21,7 @@ app.use('/api/news', newsRoutes);
 app.use('/api/admin', adminRoutes); 
 app.use('/api/user', userProfileRoutes);
 app.use('/api/forgot', forgotPasswordRoutes);
-
-
-
-
-
-
-
+app.use('/api/member', memberRoutes);
 
 app.get('/', (req, res) => {
   res.send('Backend is working!');

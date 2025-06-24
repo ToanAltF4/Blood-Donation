@@ -19,7 +19,7 @@ function ChangePassword() {
           }
         });
         const data = await res.json();
-        setHasPassword(data?.user?.hasPassword); // 👈 bạn sẽ trả về trong API profile
+        setHasPassword(data?.user?.hasPassword); //bạn sẽ trả về trong API profile
       } catch (error) {
         console.error('Lỗi khi lấy thông tin người dùng:', error);
         setHasPassword(true); // fallback: mặc định xử lý như có password

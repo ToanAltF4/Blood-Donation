@@ -21,6 +21,9 @@ import ChangePassword from './pages/ChangePassword';
 import ForgotPassword from './pages/ForgotPassword';
 import VerifyOTP from './pages/VerifyOTP';
 import ResetPassword from './pages/ResetPassword';
+import RegisterEvent from './pages/RegisterEvent';
+import MyEventRegistrations from './pages/MyEventRegistrations';
+import MyDonationHistory from './pages/MyDonationHistory';
 
 function App() {
   return (
@@ -43,8 +46,9 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/verify-otp" element={<VerifyOTP />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
-        
+        <Route path="/register-event" element={<RegisterEvent />} />
+        <Route path="/my-registrations" element={<MyEventRegistrations />} />
+        <Route path="/my-donation-history" element={<MyDonationHistory />} />
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

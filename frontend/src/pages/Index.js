@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../component/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
 
+
 const dummyNews = [
   {
     id: 1,
@@ -156,6 +157,10 @@ function Index() {
   const [currentPage, setCurrentPage] = useState(1);
   const newsPerPage = 8;
 
+  // Lấy user từ localStorage
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isMember = user && user.role === "Member";
+
   // Gọi API khi component mount
   useEffect(() => {
     const fetchNews = async () => {
@@ -197,7 +202,20 @@ function Index() {
           backgroundImage: "url(/img/background.svg)",
           minHeight: "100vh",
         }}
-      ></div>
+      >
+        {/* Nút Đăng ký ngay cho member */}
+        {isMember && (
+          <div style={{ position: "absolute", top: "60vh", left: 0, right: 0, display: "flex", justifyContent: "center" }}>
+            <button
+              className="btn btn-danger btn-lg fw-bold shadow"
+              style={{ borderRadius: 30, padding: "16px 48px", fontSize: 28 }}
+              onClick={() => navigate("/register-event")}
+            >
+              Đăng ký ngay
+            </button>
+          </div>
+        )}
+      </div>
       <div id="intro">
         <div className="intro-section">
           <h2 className="intro-header">Giới thiệu</h2>
