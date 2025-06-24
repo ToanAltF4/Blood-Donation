@@ -35,7 +35,7 @@ function ResetPassword() {
       if (res.status === 200) {
         Swal.fire('Đổi mật khẩu thành công', '', 'success');
 
-        // ✅ Xóa localStorage tạm
+        // Xóa localStorage tạm
         localStorage.removeItem('reset-email');
         localStorage.removeItem('reset-otp-token');
         localStorage.removeItem('reset-otp-expire');
