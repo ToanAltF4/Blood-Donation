@@ -1,4 +1,5 @@
 const sql = require("../config/db");
+const { sendBloodUsedNotification } = require("../utils/mailer");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -192,16 +193,15 @@ exports.getAllUnitOfBlood = async (req, res) => {
   try {
     const [rows] = await sql.query(`
       SELECT 
-  uob.*, 
-  usr.Full_Name, 
-  usr.Phone,
-  e.Name_Event AS Event_Name
-FROM Unit_of_Blood uob
-JOIN User usr ON uob.User_ID = usr.User_ID
-JOIN Event e ON uob.Event_ID = e.Event_ID;
-
+        uob.*, 
+        usr.Full_Name, 
+        usr.Phone,
+        usr.Email,
+        e.Name_Event AS Event_Name
+      FROM Unit_of_Blood uob
+      JOIN User usr ON uob.User_ID = usr.User_ID
+      JOIN Event e ON uob.Event_ID = e.Event_ID
     `);
-
     return res.status(200).json(rows);
   } catch (error) {
     console.error("Lỗi lấy danh sách đơn vị máu:", error);
@@ -308,5 +308,62 @@ exports.updateDonor = async (req, res) => {
   } catch (error) {
     console.error("Lỗi cập nhật thông tin người hiến máu:", error);
     return res.status(500).json({ message: "Lỗi server." });
+  }
+};
+
+exports.updateBloodUnitStatus = async (req, res) => {
+  const { Blood_ID, Used_Status } = req.body;
+  if (typeof Blood_ID === 'undefined' || typeof Used_Status === 'undefined') {
+    return res.status(400).json({ message: 'Thiếu Blood_ID hoặc Used_Status.' });
+  }
+  
+  try {
+    // Cập nhật trạng thái máu
+    await sql.query('UPDATE Unit_of_Blood SET Used_Status = ? WHERE Blood_ID = ?', [Used_Status ? 1 : 0, Blood_ID]);
+    
+    // Nếu máu được đánh dấu là "used" (Used_Status = 1), gửi email thông báo
+    if (Used_Status) {
+      // Lấy thông tin chi tiết về đơn vị máu, người hiến và sự kiện
+      const [bloodInfo] = await sql.query(`
+        SELECT 
+          uob.Blood_ID,
+          uob.Unit_Blood,
+          uob.Volume,
+          uob.Donate_Time,
+          usr.Full_Name,
+          usr.Email,
+          e.Name_Event
+        FROM Unit_of_Blood uob
+        JOIN User usr ON uob.User_ID = usr.User_ID
+        JOIN Event e ON uob.Event_ID = e.Event_ID
+        WHERE uob.Blood_ID = ?
+      `, [Blood_ID]);
+      
+      if (bloodInfo.length > 0) {
+        const bloodData = bloodInfo[0];
+        
+        // Gửi email thông báo
+        const emailResult = await sendBloodUsedNotification(
+          bloodData.Email,
+          bloodData.Full_Name,
+          bloodData.Name_Event,
+          bloodData.Donate_Time,
+          bloodData.Unit_Blood,
+          bloodData.Volume
+        );
+        
+        if (emailResult.success) {
+          console.log(`Email thông báo đã gửi thành công cho ${bloodData.Email}`);
+        } else {
+          console.error(`Lỗi gửi email thông báo cho ${bloodData.Email}:`, emailResult.error);
+          // Không trả về lỗi cho client vì việc cập nhật trạng thái đã thành công
+        }
+      }
+    }
+    
+    return res.status(200).json({ message: 'Cập nhật trạng thái thành công.' });
+  } catch (error) {
+    console.error('Lỗi cập nhật trạng thái đơn vị máu:', error);
+    return res.status(500).json({ message: 'Lỗi server.' });
   }
 };

@@ -58,7 +58,7 @@ function Navbar() {
             </div>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/staff/reports")}
+              onClick={() => navigate("/staff/blood-bank")}
             >
               Kho Máu
             </div>
