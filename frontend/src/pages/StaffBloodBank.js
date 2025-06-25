@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import axios from "axios";
 import Swal from "sweetalert2";
-
+import { useNavigate } from "react-router-dom";
 function StaffBloodBank() {
   const [bloodUnits, setBloodUnits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,8 +11,17 @@ function StaffBloodBank() {
   const [eventFilter, setEventFilter] = useState('');
   const [volumeFilter, setVolumeFilter] = useState('');
   const HOST = process.env.REACT_APP_HOST;
+  const navigate = useNavigate();
 
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user")); // Lưu thông tin người dùng vào localStorage
+    if (!user || !user.role) {
+      navigate("/");
+      return;
+    }
+    if (user.role != "Staff") {
+      navigate("/");
+    }
     const fetchBloodUnits = async () => {
       try {
         const token = localStorage.getItem("token");
