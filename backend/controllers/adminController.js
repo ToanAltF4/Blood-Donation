@@ -173,9 +173,22 @@ exports.changeEvent = async (req, res) => {
 exports.deleteEvent = async (req, res) => {
   const { Event_ID } = req.body;
   try {
+    // Bắt đầu transaction
+    await sql.query("START TRANSACTION");
+
+    // Xóa các bản ghi trong Unit_of_Blood trước
+    await sql.query("DELETE FROM Unit_of_Blood WHERE Event_ID = ?", [Event_ID]);
+
+    // Xóa các bản ghi trong List_Reg
+    await sql.query("DELETE FROM List_Reg WHERE Event_ID = ?", [Event_ID]);
+
+    // Cuối cùng xóa sự kiện
     const [result] = await sql.query("DELETE FROM Event WHERE Event_ID = ?", [
       Event_ID,
     ]);
+
+    // Commit transaction
+    await sql.query("COMMIT");
 
     if (result.affectedRows === 0) {
       return res
@@ -185,6 +198,8 @@ exports.deleteEvent = async (req, res) => {
 
     return res.status(200).json({ message: "Xóa sự kiện thành công." });
   } catch (error) {
+    // Rollback nếu có lỗi
+    await sql.query("ROLLBACK");
     console.error("Lỗi xóa sự kiện:", error);
     return res.status(500).json({ message: "Lỗi server." });
   }
@@ -201,6 +216,7 @@ exports.getAllUnitOfBlood = async (req, res) => {
       FROM Unit_of_Blood uob
       JOIN User usr ON uob.User_ID = usr.User_ID
       JOIN Event e ON uob.Event_ID = e.Event_ID
+      ORDER BY uob.Donate_Time ASC
     `);
     return res.status(200).json(rows);
   } catch (error) {
