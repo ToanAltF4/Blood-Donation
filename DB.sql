@@ -9,8 +9,6 @@ drop table Post;
 drop table ListPrepare;
 drop table List_Reg;
 
-
-
 CREATE TABLE User (
     User_ID INT AUTO_INCREMENT PRIMARY KEY,
     Full_Name VARCHAR(100),
@@ -22,7 +20,9 @@ CREATE TABLE User (
     Role VARCHAR(20),
     Blood VARCHAR(3),
     Date_of_birth DATETIME,
-    Family_contact VARCHAR(15)
+    Family_contact VARCHAR(15),
+    Latitude DECIMAL(10, 8),
+    Longitude DECIMAL(11, 8)
 );
 CREATE TABLE Event (
     Event_ID INT AUTO_INCREMENT PRIMARY KEY,

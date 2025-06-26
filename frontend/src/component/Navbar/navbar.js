@@ -62,6 +62,12 @@ function Navbar() {
             >
               Kho Máu
             </div>
+            <div
+              className="dropdown-item"
+              onClick={() => navigate("/admin/ready-donors")}
+            >
+              Người sẵn sàng hiến máu
+            </div>
             <hr />
             <div className="dropdown-item" onClick={handleLogout}>
               Gửi Thông Báo

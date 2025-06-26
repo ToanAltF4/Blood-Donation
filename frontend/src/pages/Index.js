@@ -2,6 +2,7 @@ import "./Index.css";
 import React, { useState, useEffect } from "react";
 import Navbar from "../component/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 
 const dummyNews = [
@@ -155,6 +156,8 @@ function Index() {
   const navigate = useNavigate();
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showReadyDonateModal, setShowReadyDonateModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const newsPerPage = 8;
 
   // Lấy user từ localStorage
@@ -193,6 +196,88 @@ function Index() {
   const toggleAccordion = (index) => {
     setActiveIndex(index === activeIndex ? null : index);
   };
+
+  // Kiểm tra thông tin cá nhân bắt buộc (dùng key viết thường)
+  const isUserInfoComplete = (user) => {
+    if (!user) return false;
+    const requiredFields = [
+      "full_name",
+      "cccd",
+      "phone",
+      "email",
+      "location",
+      "date_of_birth",
+    ];
+    return requiredFields.every((field) => user[field] && user[field].toString().trim() !== "");
+  };
+
+  // Xử lý đăng ký sẵn sàng hiến máu
+  const handleReadyDonateClick = () => {
+    if (!isUserInfoComplete(user)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Vui lòng cập nhật đầy đủ thông tin cá nhân để đăng ký sẵn sàng hiến máu!",
+        showConfirmButton: true,
+      });
+      return;
+    }
+    setShowReadyDonateModal(true);
+  };
+
+  const handleReadyDonate = async () => {
+    setIsLoading(true);
+    try {
+      // Lấy vị trí hiện tại
+      const position = await new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject, {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        });
+      });
+      const { latitude, longitude } = position.coords;
+      // Gọi API đăng ký
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${HOST}/api/ready-donate/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ latitude, longitude })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Đăng ký sẵn sàng hiến máu thành công!",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        setShowReadyDonateModal(false);
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: data.message || 'Có lỗi xảy ra!',
+        });
+      }
+    } catch (error) {
+      if (error.code === 1) {
+        Swal.fire({
+          icon: "warning",
+          title: "Vui lòng cho phép truy cập vị trí để đăng ký!",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Có lỗi xảy ra khi lấy vị trí!",
+        });
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       <div
@@ -203,9 +288,23 @@ function Index() {
           minHeight: "100vh"
         }}
       >
+      
+        {/* Nút Đăng ký sẵn sàng hiến máu cho member */}
+        {isMember && (
+          <div className="d-flex justify-content-center" style={{ position: "absolute", top: "25vh",left: 60 }}>
+            <button
+              className="btn btn-warning btn-lg fw-bold shadow"
+              style={{ borderRadius: 30, padding: "18px 60px", fontSize: 32 }}
+              onClick={handleReadyDonateClick}
+            >
+              Đăng ký sẵn sàng hiến máu
+            </button>
+          </div>
+        )}
+
         {/* Nút Đăng ký ngay cho member */}
         {isMember && (
-          <div style={{ position: "absolute", top: "98vh", left: 0, right: 1600, display: "flex", justifyContent: "center" }}>
+          <div style={{ position: "absolute", top: "98vh", left: 60 }}>
             <button
               className="btn btn-danger btn-lg fw-bold shadow"
               style={{ borderRadius: 30, padding: "16px 48px", fontSize: 28 }}
@@ -216,6 +315,52 @@ function Index() {
           </div>
         )}
       </div>
+
+      {/* Modal đăng ký sẵn sàng hiến máu */}
+      {showReadyDonateModal && (
+        <div className="modal-overlay" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 2000
+        }}>
+          <div className="modal-content" style={{
+            backgroundColor: 'white',
+            padding: '30px',
+            borderRadius: '10px',
+            maxWidth: '500px',
+            width: '90%',
+            textAlign: 'center'
+          }}>
+            <h3>Xác nhận đăng ký sẵn sàng hiến máu</h3>
+            <p>Bạn có chắc chắn muốn đăng ký sẵn sàng hiến máu không?</p>
+            <p><strong>Lưu ý:</strong> Hệ thống sẽ yêu cầu quyền truy cập vị trí của bạn.</p>
+            <div style={{ marginTop: '20px', display: 'flex', gap: '10px', justifyContent: 'center' }}>
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowReadyDonateModal(false)}
+                disabled={isLoading}
+              >
+                Hủy
+              </button>
+              <button
+                className="btn btn-success"
+                onClick={handleReadyDonate}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div id="intro">
         <div className="intro-section">
           <h2 className="intro-header">Giới thiệu</h2>
