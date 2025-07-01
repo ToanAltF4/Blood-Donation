@@ -359,3 +359,37 @@
   height: auto;
   object-fit: contain;
 }
+
+/* Fix cho SweetAlert2 aria-hidden issue */
+.swal-no-aria-hidden {
+  z-index: 9999 !important;
+}
+
+/* Đảm bảo SweetAlert2 không ảnh hưởng đến aria-hidden của root */
+.swal2-container {
+  z-index: 9999 !important;
+}
+
+/* Khi SweetAlert2 mở, không ẩn root element */
+.swal2-container[aria-hidden="true"] ~ #root,
+.swal2-container ~ #root[aria-hidden="true"] {
+  aria-hidden: auto !important;
+}
+
+/* Bỏ viền xanh của SweetAlert2 popup */
+.swal2-popup:focus {
+  outline: none !important;
+}
+
+.swal2-popup {
+  outline: none !important;
+}
+
+.swal2-popup *:focus {
+  outline: none !important;
+}
+
+/* Ẩn backdrop mặc định của SweetAlert2 */
+.swal2-backdrop-show {
+  background: transparent !important;
+}

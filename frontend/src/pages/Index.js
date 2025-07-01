@@ -5,7 +5,36 @@ import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 
+const HOST = process.env.REACT_APP_HOST;
 
+// Wrapper function để xử lý vấn đề aria-hidden
+const showAlert = (options) => {
+  // Xóa aria-hidden từ root element trước khi hiển thị alert
+  const rootElement = document.getElementById('root');
+  if (rootElement && rootElement.getAttribute('aria-hidden') === 'true') {
+    rootElement.removeAttribute('aria-hidden');
+  }
+  
+  return Swal.fire({
+    ...options,
+    backdrop: false,
+    allowOutsideClick: false,
+    customClass: {
+      container: 'swal-no-aria-hidden',
+      ...options.customClass
+    },
+    didOpen: () => {
+      // Không set focus vào popup để tránh viền xanh
+    },
+    willClose: () => {
+      // Khôi phục focus về element trước đó
+      const rootElement = document.getElementById('root');
+      if (rootElement) {
+        rootElement.focus();
+      }
+    }
+  });
+};
 
 const faqList = [
   {
@@ -40,7 +69,6 @@ const faqList = [
   },
 ];
 function Index() {
-  const HOST = process.env.REACT_APP_HOST;
   const navigate = useNavigate();
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -108,10 +136,13 @@ function Index() {
   // Xử lý đăng ký sẵn sàng hiến máu
   const handleReadyDonateClick = () => {
     if (!isUserInfoComplete(user)) {
-      Swal.fire({
+      showAlert({
         icon: "warning",
         title: "Vui lòng cập nhật đầy đủ thông tin cá nhân để đăng ký sẵn sàng hiến máu!",
         showConfirmButton: true,
+        customClass: {
+          container: 'swal-no-aria-hidden'
+        }
       });
       return;
     }
@@ -141,29 +172,41 @@ function Index() {
       });
       const data = await response.json();
       if (response.ok) {
-        Swal.fire({
+        showAlert({
           icon: "success",
           title: "Đăng ký sẵn sàng hiến máu thành công!",
           timer: 2000,
           showConfirmButton: false,
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
         });
         setShowReadyDonateModal(false);
       } else {
-        Swal.fire({
+        showAlert({
           icon: "error",
           title: data.message || 'Có lỗi xảy ra!',
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
         });
       }
     } catch (error) {
       if (error.code === 1) {
-        Swal.fire({
+        showAlert({
           icon: "warning",
           title: "Vui lòng cho phép truy cập vị trí để đăng ký!",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
         });
       } else {
-        Swal.fire({
+        showAlert({
           icon: "error",
           title: "Có lỗi xảy ra khi lấy vị trí!",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
         });
       }
     }
@@ -172,7 +215,13 @@ function Index() {
   // Gửi yêu cầu máu khẩn cấp
   const handleSendEmergency = async () => {
     if (!emergencyBlood) {
-      Swal.fire({ icon: 'warning', title: 'Vui lòng chọn nhóm máu cần khẩn cấp!' });
+      showAlert({ 
+        icon: 'warning', 
+        title: 'Vui lòng chọn nhóm máu cần khẩn cấp!',
+        customClass: {
+          container: 'swal-no-aria-hidden'
+        }
+      });
       return;
     }
     setEmergencyLoading(true);
@@ -186,9 +235,22 @@ function Index() {
       });
       setShowEmergencyModal(false);
       setEmergencyBlood("");
-      Swal.fire({ icon: 'success', title: 'Đã gửi yêu cầu máu khẩn cấp!' });
+      showAlert({ 
+        icon: 'success', 
+        title: 'Đã gửi yêu cầu máu khẩn cấp!',
+        customClass: {
+          container: 'swal-no-aria-hidden'
+        }
+      });
     } catch (error) {
-      Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không gửi được yêu cầu!' });
+      showAlert({ 
+        icon: 'error', 
+        title: 'Lỗi', 
+        text: 'Không gửi được yêu cầu!',
+        customClass: {
+          container: 'swal-no-aria-hidden'
+        }
+      });
     }
     setEmergencyLoading(false);
   };
