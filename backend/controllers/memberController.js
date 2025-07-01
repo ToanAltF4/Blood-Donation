@@ -76,4 +76,21 @@ exports.getAllEventsForMember = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Lỗi server." });
   }
+};
+
+exports.emergencyRequest = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+    const { Blood_need, Location } = req.body;
+    if (!Blood_need || !Location) {
+      return res.status(400).json({ message: 'Thiếu thông tin nhóm máu hoặc địa chỉ.' });
+    }
+    await sql.query(
+      'INSERT INTO Emergency (Location, Blood_need, Status, User_ID) VALUES (?, ?, ?, ?)',
+      [Location, Blood_need, 'pending', userId]
+    );
+    return res.status(201).json({ message: 'Đã gửi yêu cầu máu khẩn cấp.' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server.' });
+  }
 }; 

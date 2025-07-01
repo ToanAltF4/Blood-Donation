@@ -15,6 +15,7 @@ import ControllEvent from './admin/controllEvent';
 import EventDetail from './admin/EventDetail';
 import Dashboard from './admin/dashboard';
 import ControllNews from './admin/controllNews';
+import ControllPrepareList from './admin/ControllPrepareList';
 import News from './pages/News';
 import NewsDetail from "./pages/NewsDetail"; 
 import ChangePassword from './pages/ChangePassword'; 
@@ -25,6 +26,7 @@ import RegisterEvent from './pages/RegisterEvent';
 import MyEventRegistrations from './pages/MyEventRegistrations';
 import MyDonationHistory from './pages/MyDonationHistory';
 import StaffBloodBank from './pages/StaffBloodBank';
+import EmergencyRequests from './admin/EmergencyRequests';
 
 function App() {
   return (
@@ -41,6 +43,7 @@ function App() {
         <Route path="/admin/event-detail/:id" element={<EventDetail />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/news" element={<ControllNews />} />
+        <Route path="/admin/ready-donors" element={<ControllPrepareList />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/change-password" element={<ChangePassword />} />
@@ -51,6 +54,7 @@ function App() {
         <Route path="/my-registrations" element={<MyEventRegistrations />} />
         <Route path="/my-donation-history" element={<MyDonationHistory />} />
         <Route path="/staff/blood-bank" element={<StaffBloodBank />} />
+        <Route path="/admin/emergency-requests" element={<EmergencyRequests />} />
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

@@ -11,5 +11,7 @@ router.get('/my-registrations', authenticateToken, memberController.getMyRegistr
 router.get('/my-donation-history', authenticateToken, memberController.getMyDonationHistory);
 // Lấy tất cả sự kiện cho member
 router.get('/events', authenticateToken, memberController.getAllEventsForMember);
+// Member gửi yêu cầu máu khẩn cấp
+router.post('/emergency', authenticateToken, memberController.emergencyRequest);
 
 module.exports = router; 

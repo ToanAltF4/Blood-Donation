@@ -46,16 +46,21 @@ CREATE TABLE List_Reg (
     List_ID INT AUTO_INCREMENT PRIMARY KEY,
     Event_ID INT,
     User_ID INT,
+    Status VARCHAR(20) DEFAULT 'pending',
     FOREIGN KEY (Event_ID) REFERENCES Event(Event_ID),
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
 );
 CREATE TABLE ListPrepare (
     ListPrepare_ID INT AUTO_INCREMENT PRIMARY KEY,
     User_ID INT,
+    Status VARCHAR(20) DEFAULT 'active',
+    Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (User_ID) REFERENCES User(User_ID)
 );
 CREATE TABLE Post (
     Post_ID INT AUTO_INCREMENT PRIMARY KEY,
+    Post_Img VARCHAR(255),
+    Post_Header VARCHAR(255),
     Post_Content TEXT,
     Post_Time DATETIME,
     User_ID INT,
@@ -92,6 +97,18 @@ USE blooddonation;
 ALTER TABLE Post
 ADD COLUMN Post_Img VARCHAR(255) AFTER Post_ID;
 
+-- Thêm cột Status cho bảng ListPrepare nếu chưa có
+ALTER TABLE ListPrepare 
+ADD COLUMN Status VARCHAR(20) DEFAULT 'active' AFTER User_ID,
+ADD COLUMN Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP AFTER Status;
+
+-- Thêm cột Status cho bảng List_Reg nếu chưa có
+ALTER TABLE List_Reg 
+ADD COLUMN Status VARCHAR(20) DEFAULT 'pending' AFTER User_ID;
+
+-- Thêm cột Post_Header cho bảng Post nếu chưa có
+ALTER TABLE Post 
+ADD COLUMN Post_Header VARCHAR(255) AFTER Post_Img;
 
 -- INSERT INTO User (
 --     Full_Name,

@@ -383,3 +383,49 @@ exports.updateBloodUnitStatus = async (req, res) => {
     return res.status(500).json({ message: 'Lỗi server.' });
   }
 };
+
+exports.getEmergencyRequests = async (req, res) => {
+  try {
+    const [rows] = await sql.query(`
+      SELECT 
+        er.Request_ID,
+        er.Blood_Type,
+        er.Volume_Needed,
+        er.Urgency_Level,
+        er.Status,
+        er.Request_Date,
+        er.Description,
+        er.Contact_Info
+      FROM Emergency_Request er
+      ORDER BY er.Request_Date DESC
+    `);
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error("Lỗi lấy danh sách yêu cầu máu khẩn cấp:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};
+
+exports.updateEmergencyStatus = async (req, res) => {
+  const { Request_ID, Status } = req.body;
+  
+  if (!Request_ID || !Status) {
+    return res.status(400).json({ message: "Thiếu Request_ID hoặc Status." });
+  }
+
+  try {
+    const [result] = await sql.query(
+      "UPDATE Emergency_Request SET Status = ? WHERE Request_ID = ?",
+      [Status, Request_ID]
+    );
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Không tìm thấy yêu cầu khẩn cấp." });
+    }
+    
+    return res.status(200).json({ message: "Cập nhật trạng thái thành công." });
+  } catch (error) {
+    console.error("Lỗi cập nhật trạng thái yêu cầu khẩn cấp:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};

@@ -34,4 +34,9 @@ router.get('/test-smtp', authenticateToken, authorizeRoles('Admin', 'Staff'), as
   }
 });
 
+// Lấy danh sách yêu cầu máu khẩn cấp
+router.get('/emergency-requests', authenticateToken, authorizeRoles('Staff'), adminController.getEmergencyRequests);
+// Cập nhật trạng thái yêu cầu máu khẩn cấp
+router.post('/update-emergency-status', authenticateToken, authorizeRoles('Staff'), adminController.updateEmergencyStatus);
+
 module.exports = router;

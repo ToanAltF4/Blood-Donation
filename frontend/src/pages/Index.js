@@ -3,122 +3,10 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../component/Navbar/navbar";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 
-const dummyNews = [
-  {
-    id: 1,
-    title: "Ngày hội hiến máu 2025",
-    date: "2025-05-20",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 2,
-    title: "Hiến máu cứu người giữa đêm khuya",
-    date: "2025-05-18",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 3,
-    title: "Đại học FPT tổ chức hiến máu nhân đạo",
-    date: "2025-05-15",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 4,
-    title: "Câu chuyện hiến máu của những người hùng",
-    date: "2025-05-10",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 5,
-    title: "Hiến máu và những điều cần biết",
-    date: "2025-05-05",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 6,
-    title: "Tầm quan trọng của việc hiến máu định kỳ",
-    date: "2025-04-30",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 7,
-    title: "Những câu hỏi thường gặp về hiến máu",
-    date: "2025-04-25",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 8,
-    title: "Cách chăm sóc sau khi hiến máu",
-    date: "2025-04-20",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 9,
-    title: "Hiến máu và sức khỏe cộng đồng",
-    date: "2025-04-15",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 10,
-    title: "Câu chuyện cảm động từ người hiến máu",
-    date: "2025-04-10",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 11,
-    title: "Hiến máu và những lợi ích sức khỏe",
-    date: "2025-04-05",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 12,
-    title: "Chương trình hiến máu tại bệnh viện XYZ",
-    date: "2025-04-01",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 13,
-    title: "Hiến máu và những điều cần lưu ý",
-    date: "2025-03-30",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 14,
-    title: "Câu chuyện hiến máu của những người anh hùng",
-    date: "2025-03-25",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 15,
-    title: "Hiến máu và những lợi ích cho sức khỏe",
-    date: "2025-03-20",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-  {
-    id: 16,
-    title: "Chương trình hiến máu tại trường đại học ABC",
-    date: "2025-03-15",
-    image:
-      "https://tse3.mm.bing.net/th?id=OIP.p_ZKkTvEYvM49jcJ1do_kgHaFj&pid=Api&P=0&h=180",
-  },
-];
+
 const faqList = [
   {
     question: "Tôi có thể hiến máu bao nhiêu lần trong năm?",
@@ -157,12 +45,18 @@ function Index() {
   const [newsList, setNewsList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showReadyDonateModal, setShowReadyDonateModal] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [emergencyBlood, setEmergencyBlood] = useState("");
+  const [emergencyLoading, setEmergencyLoading] = useState(false);
   const newsPerPage = 8;
 
   // Lấy user từ localStorage
   const user = JSON.parse(localStorage.getItem("user"));
   const isMember = user && user.role === "Member";
+
+  // Danh sách nhóm máu
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
+  const emergencyAddress = "99 Lê Văn Việt, Phường Tân Phú, TP Thủ Đức";
 
   // Gọi API khi component mount
   useEffect(() => {
@@ -225,7 +119,6 @@ function Index() {
   };
 
   const handleReadyDonate = async () => {
-    setIsLoading(true);
     try {
       // Lấy vị trí hiện tại
       const position = await new Promise((resolve, reject) => {
@@ -273,9 +166,31 @@ function Index() {
           title: "Có lỗi xảy ra khi lấy vị trí!",
         });
       }
-    } finally {
-      setIsLoading(false);
     }
+  };
+
+  // Gửi yêu cầu máu khẩn cấp
+  const handleSendEmergency = async () => {
+    if (!emergencyBlood) {
+      Swal.fire({ icon: 'warning', title: 'Vui lòng chọn nhóm máu cần khẩn cấp!' });
+      return;
+    }
+    setEmergencyLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(`${HOST}/api/member/emergency`, {
+        Blood_need: emergencyBlood,
+        Location: emergencyAddress,
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setShowEmergencyModal(false);
+      setEmergencyBlood("");
+      Swal.fire({ icon: 'success', title: 'Đã gửi yêu cầu máu khẩn cấp!' });
+    } catch (error) {
+      Swal.fire({ icon: 'error', title: 'Lỗi', text: 'Không gửi được yêu cầu!' });
+    }
+    setEmergencyLoading(false);
   };
 
   return (
@@ -301,6 +216,29 @@ function Index() {
             </button>
           </div>
         )}
+        {/* Button khẩn cấp cho member */}
+      {isMember && (
+        <div style={{ position: "absolute", top: "32vh", right: 60 }}>
+        <button
+          className="btn btn-danger rounded-circle shadow "
+          style={{
+            
+            width: 108,
+            height: 108,
+            fontSize: 18,
+            fontWeight: 'bold',
+            textAlign: 'center',
+            
+            lineHeight: 1.1,
+            boxShadow: '0 4px 16px rgba(220,53,69,0.2)'
+          }}
+          title="Cần máu khẩn cấp"
+          onClick={() => setShowEmergencyModal(true)}
+        >
+          Cần máu<br/>khẩn cấp
+        </button>
+        </div>
+      )}
 
         {/* Nút Đăng ký ngay cho member */}
         {isMember && (
@@ -345,17 +283,62 @@ function Index() {
               <button
                 className="btn btn-secondary"
                 onClick={() => setShowReadyDonateModal(false)}
-                disabled={isLoading}
               >
                 Hủy
               </button>
               <button
                 className="btn btn-success"
                 onClick={handleReadyDonate}
-                disabled={isLoading}
               >
-                {isLoading ? 'Đang xử lý...' : 'Xác nhận'}
+                Xác nhận
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      
+      {/* Modal form khẩn cấp */}
+      {showEmergencyModal && (
+        <div className="modal fade show d-block w-100 vh-100" style={{ display: 'block', background: 'rgba(0,0,0,0.3)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header bg-danger text-white">
+                <h5 className="modal-title"><i className="bi bi-exclamation-triangle-fill me-2"></i>Yêu cầu máu khẩn cấp</h5>
+                <button type="button" className="btn-close" onClick={() => setShowEmergencyModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Nhóm máu cần khẩn cấp</label>
+                  <select
+                    className="form-select"
+                    value={emergencyBlood}
+                    onChange={e => setEmergencyBlood(e.target.value)}
+                  >
+                    <option value="">-- Chọn nhóm máu --</option>
+                    {bloodGroups.map(bg => (
+                      <option key={bg} value={bg}>{bg}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Địa chỉ nhận máu</label>
+                  <input
+                    className="form-control"
+                    value={emergencyAddress}
+                    disabled
+                  />
+                </div>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-danger fw-bold"
+                  onClick={handleSendEmergency}
+                  disabled={emergencyLoading}
+                >
+                  {emergencyLoading ? 'Đang gửi...' : 'Gửi'}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -72,7 +72,10 @@ function Navbar() {
             <div className="dropdown-item" onClick={handleLogout}>
               Gửi Thông Báo
             </div>
-            <div className="dropdown-item" onClick={handleLogout}>
+            <div
+              className="dropdown-item"
+              onClick={() => navigate("/admin/emergency-requests")}
+            >
               Yêu Cầu Máu Khẩn Cấp
             </div>
             <div className="dropdown-item" onClick={handleLogout}>
