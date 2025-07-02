@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const [bloodUnits, setBloodUnits] = useState([]);
+  const [readyDonors, setReadyDonors] = useState([]);
 
   const [selectedIndex, setSelectedIndex] = useState(null);
   const HOST = process.env.REACT_APP_HOST;
@@ -66,7 +67,20 @@ function Dashboard() {
       }
     };
 
+    const fetchReadyDonors = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${HOST}/api/ready-donate/ready-donors`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setReadyDonors(response.data);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh sách người sẵn sàng hiến máu:", error);
+      }
+    };
+
     fetchBloodUnits();
+    fetchReadyDonors();
   }, []);
 
   const customStyles = {
@@ -164,9 +178,9 @@ function Dashboard() {
                   <FaTint size={50} color="#dc3545" className="me-3" />
                   <div>
                     <div style={{ fontSize: "20px", fontWeight: "bold" }}>
-                      {b.volume}
+                      {b.type}
                     </div>
-                    <div>{b.type} ml máu</div>
+                    <div>{b.volume} ml máu</div>
                   </div>
                 </div>
               </div>
@@ -213,7 +227,7 @@ function Dashboard() {
             {[
               {
                 title: "Tổng người sẵn sàng hiến",
-                count: 0, // (có thể đếm từ danh sách User khác nếu cần)
+                count: readyDonors.length,
                 icon: (
                   <i
                     className="bi bi-person-heart"

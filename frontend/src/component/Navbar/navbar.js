@@ -35,6 +35,12 @@ function Navbar() {
             >
               Quản lý bài đăng
             </div>
+            <div
+              className="dropdown-item"
+              onClick={() => navigate("/admin/event-reports")}
+            >
+              Thống kê
+            </div>
             <div className="dropdown-item" onClick={handleLogout}>
               Đăng xuất
             </div>
@@ -68,21 +74,15 @@ function Navbar() {
             >
               Người sẵn sàng hiến máu
             </div>
-            <hr />
-            <div className="dropdown-item" onClick={handleLogout}>
-              Gửi Thông Báo
-            </div>
             <div
               className="dropdown-item"
-              onClick={() => navigate("/admin/emergency-requests")}
+              onClick={() => navigate("/admin/event-reports")}
             >
-              Yêu Cầu Máu Khẩn Cấp
+              Thống kê
             </div>
+            <hr />
             <div className="dropdown-item" onClick={handleLogout}>
-              Thống Kê
-            </div>
-            <div className="dropdown-item" onClick={handleLogout}>
-              Đăng Xuất
+              Đăng xuất
             </div>
           </>
         );

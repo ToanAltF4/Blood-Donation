@@ -80,6 +80,8 @@ function Index() {
   const [currentPage, setCurrentPage] = useState(1);
   const [showReadyDonateModal, setShowReadyDonateModal] = useState(false);
   const [showEmergencyModal, setShowEmergencyModal] = useState(false);
+  const [showBloodLookupModal, setShowBloodLookupModal] = useState(false);
+  const [lookupBlood, setLookupBlood] = useState("");
   const [emergencyBlood, setEmergencyBlood] = useState("");
   const [emergencyLoading, setEmergencyLoading] = useState(false);
   const newsPerPage = 8;
@@ -91,6 +93,18 @@ function Index() {
   // Danh sách nhóm máu
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const emergencyAddress = "99 Lê Văn Việt, Phường Tân Phú, TP Thủ Đức";
+
+  // Quy tắc truyền máu (đơn giản hóa)
+  const bloodCompatibility = {
+    "A+": { receive: ["A+", "A-", "O+", "O-"], donate: ["A+", "AB+"] },
+    "A-": { receive: ["A-", "O-"], donate: ["A-", "A+", "AB-", "AB+"] },
+    "B+": { receive: ["B+", "B-", "O+", "O-"], donate: ["B+", "AB+"] },
+    "B-": { receive: ["B-", "O-"], donate: ["B-", "B+", "AB-", "AB+"] },
+    "AB+": { receive: ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"] , donate: ["AB+"] },
+    "AB-": { receive: ["A-", "B-", "AB-", "O-"] , donate: ["AB-", "AB+"] },
+    "O+": { receive: ["O+", "O-"] , donate: ["O+", "A+", "B+", "AB+"] },
+    "O-": { receive: ["O-"] , donate: ["O-", "O+", "A-", "A+", "B-", "B+", "AB-", "AB+"] },
+  };
 
   // Gọi API khi component mount
   useEffect(() => {
@@ -336,25 +350,24 @@ function Index() {
         )}
         {/* Button khẩn cấp cho member */}
       {isMember && (
-        <div style={{ position: "absolute", top: "32vh", right: 60 }}>
-        <button
-          className="btn btn-danger rounded-circle shadow "
-          style={{
-            
-            width: 108,
-            height: 108,
-            fontSize: 18,
-            fontWeight: 'bold',
-            textAlign: 'center',
-            
-            lineHeight: 1.1,
-            boxShadow: '0 4px 16px rgba(220,53,69,0.2)'
-          }}
-          title="Cần máu khẩn cấp"
-          onClick={() => setShowEmergencyModal(true)}
-        >
-          Cần máu<br/>khẩn cấp
-        </button>
+        <div style={{ position: "absolute", top: "30vh", right: 60 }}>
+          <button
+            className="btn btn-danger rounded-circle shadow "
+            style={{ width: 108, marginLeft: 90, height: 108, fontSize: 18, fontWeight: 'bold', textAlign: 'center', lineHeight: 1.1, boxShadow: '0 4px 16px rgba(220,53,69,0.2)' }}
+            title="Cần máu khẩn cấp"
+            onClick={() => setShowEmergencyModal(true)}
+          >
+            Cần máu<br/>khẩn cấp
+          </button>
+          <div className="mt-3 d-flex justify-content-center">
+            <button
+              className="btn btn-info fw-bold"
+              style={{ borderRadius: 30, padding: "10px 28px", fontSize: 18 }}
+              onClick={() => setShowBloodLookupModal(true)}
+            >
+              Tra cứu nhóm máu
+            </button>
+          </div>
         </div>
       )}
 
@@ -462,6 +475,58 @@ function Index() {
                 >
                   {emergencyLoading ? 'Đang gửi...' : 'Gửi'}
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal tra cứu nhóm máu */}
+      {showBloodLookupModal && (
+        <div className="modal fade show d-block w-100 vh-100" style={{ display: 'block', background: 'rgba(0,0,0,0.3)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header bg-info text-white">
+                <h5 className="modal-title"><i className="bi bi-search me-2"></i>Tra cứu nhóm máu</h5>
+                <button type="button" className="btn-close" onClick={() => setShowBloodLookupModal(false)}></button>
+              </div>
+              <div className="modal-body">
+                <div className="mb-3">
+                  <label className="form-label fw-bold">Chọn nhóm máu của bạn</label>
+                  <select
+                    className="form-select"
+                    value={lookupBlood}
+                    onChange={e => setLookupBlood(e.target.value)}
+                  >
+                    <option value="">-- Chọn nhóm máu --</option>
+                    {bloodGroups.map(bg => (
+                      <option key={bg} value={bg}>{bg}</option>
+                    ))}
+                  </select>
+                </div>
+                {lookupBlood && (
+                  <>
+                    <div className="mb-2">
+                      <strong>Nhóm máu có thể nhận:</strong>
+                      <div className="mt-1">
+                        {bloodCompatibility[lookupBlood].receive.map(bg => (
+                          <span key={bg} className="badge bg-success me-2 mb-1" style={{ fontSize: 16 }}>{bg}</span>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="mb-2">
+                      <strong>Nhóm máu có thể hiến:</strong>
+                      <div className="mt-1">
+                        {bloodCompatibility[lookupBlood].donate.map(bg => (
+                          <span key={bg} className="badge bg-primary me-2 mb-1" style={{ fontSize: 16 }}>{bg}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+              <div className="modal-footer">
+                <button className="btn btn-secondary" onClick={() => setShowBloodLookupModal(false)}>Đóng</button>
               </div>
             </div>
           </div>

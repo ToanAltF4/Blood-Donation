@@ -8,7 +8,7 @@ const readyDonateController = require('../controllers/readyDonateController');
 router.post('/register', authenticateToken, readyDonateController.registerReadyToDonate);
 
 // Route cho Staff lấy danh sách người sẵn sàng hiến máu
-router.get('/ready-donors', authenticateToken, authorizeRoles('Staff'), readyDonateController.getReadyDonors);
+router.get('/ready-donors', authenticateToken, authorizeRoles('Staff','Admin'), readyDonateController.getReadyDonors);
 
 // Route cho Staff gửi thông báo khẩn cấp
 router.post('/send-emergency', authenticateToken, authorizeRoles('Staff'), readyDonateController.sendEmergencyRequest);

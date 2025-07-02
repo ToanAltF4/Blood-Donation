@@ -450,3 +450,89 @@ exports.updateEmergencyStatus = async (req, res) => {
     return res.status(500).json({ message: "Lỗi server." });
   }
 };
+
+// ==== EVENT REPORT CRUD (STAFF + ADMIN) ====
+
+// Lấy tất cả báo cáo sự kiện kèm thông tin sự kiện, số lượng đăng ký, số lượng hiến máu thành công, thống kê nhóm máu
+exports.getAllEventReports = async (req, res) => {
+  try {
+    const [rows] = await sql.query(`
+      SELECT er.Report_ID, er.Time_Report, er.Event_ID,
+             e.Name_Event, e.Location, e.Time_Start, e.Time_End,
+             -- Tổng số đăng ký
+             (SELECT COUNT(*) FROM List_Reg lr WHERE lr.Event_ID = er.Event_ID) AS Total_Registered,
+             -- Số lượng hiến máu thành công
+             (SELECT COUNT(*) FROM Unit_of_Blood uob WHERE uob.Event_ID = er.Event_ID) AS Total_Donated
+      FROM Event_Report er
+      JOIN Event e ON er.Event_ID = e.Event_ID
+      ORDER BY er.Time_Report DESC
+    `);
+
+    // Lấy thống kê nhóm máu cho từng báo cáo
+    for (const row of rows) {
+      const [bloodStats] = await sql.query(`
+        SELECT Unit_Blood, COUNT(*) as count
+        FROM Unit_of_Blood
+        WHERE Event_ID = ?
+        GROUP BY Unit_Blood
+      `, [row.Event_ID]);
+      row.BloodStats = bloodStats; // [{Unit_Blood: 'A', count: 5}, ...]
+    }
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error("Lỗi lấy danh sách báo cáo sự kiện:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};
+
+// Thêm báo cáo sự kiện mới
+exports.createEventReport = async (req, res) => {
+  const { Event_ID } = req.body;
+  if (!Event_ID) return res.status(400).json({ message: "Thiếu Event_ID." });
+  try {
+    // Kiểm tra sự kiện tồn tại
+    const [eventRows] = await sql.query("SELECT * FROM Event WHERE Event_ID = ?", [Event_ID]);
+    if (eventRows.length === 0) return res.status(404).json({ message: "Không tìm thấy sự kiện." });
+    // Thêm báo cáo
+    const [result] = await sql.query(
+      "INSERT INTO Event_Report (Time_Report, Event_ID) VALUES (NOW(), ?)",
+      [Event_ID]
+    );
+    return res.status(201).json({ message: "Tạo báo cáo thành công.", Report_ID: result.insertId });
+  } catch (error) {
+    console.error("Lỗi tạo báo cáo sự kiện:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};
+
+// Sửa thời gian báo cáo (cập nhật lại timestamp)
+exports.updateEventReport = async (req, res) => {
+  const { Report_ID } = req.body;
+  if (!Report_ID) return res.status(400).json({ message: "Thiếu Report_ID." });
+  try {
+    const [result] = await sql.query(
+      "UPDATE Event_Report SET Time_Report = NOW() WHERE Report_ID = ?",
+      [Report_ID]
+    );
+    if (result.affectedRows === 0) return res.status(404).json({ message: "Không tìm thấy báo cáo." });
+    return res.status(200).json({ message: "Cập nhật báo cáo thành công." });
+  } catch (error) {
+    console.error("Lỗi cập nhật báo cáo:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};
+
+// Xóa báo cáo sự kiện
+exports.deleteEventReport = async (req, res) => {
+  const { Report_ID } = req.body;
+  if (!Report_ID) return res.status(400).json({ message: "Thiếu Report_ID." });
+  try {
+    const [result] = await sql.query("DELETE FROM Event_Report WHERE Report_ID = ?", [Report_ID]);
+    if (result.affectedRows === 0) return res.status(404).json({ message: "Không tìm thấy báo cáo để xóa." });
+    return res.status(200).json({ message: "Xóa báo cáo thành công." });
+  } catch (error) {
+    console.error("Lỗi xóa báo cáo:", error);
+    return res.status(500).json({ message: "Lỗi server." });
+  }
+};

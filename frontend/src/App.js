@@ -27,6 +27,7 @@ import MyEventRegistrations from './pages/MyEventRegistrations';
 import MyDonationHistory from './pages/MyDonationHistory';
 import StaffBloodBank from './pages/StaffBloodBank';
 import EmergencyRequests from './admin/EmergencyRequests';
+import EventReport from './admin/EventReport';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
         <Route path="/my-donation-history" element={<MyDonationHistory />} />
         <Route path="/staff/blood-bank" element={<StaffBloodBank />} />
         <Route path="/admin/emergency-requests" element={<EmergencyRequests />} />
+        <Route path="/admin/event-reports" element={<EventReport />} />
         {/* Thêm các route khác nếu cần */}
       </Routes>
       <Footer />

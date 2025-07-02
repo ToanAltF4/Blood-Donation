@@ -230,7 +230,7 @@ function ControllEvent() {
       <p>{data.Content}</p>
       {data.Registrants && data.Registrants.length > 0 ? (
         <ul style={{ listStyleType: "none", paddingLeft: "0" }}>
-          <strong>Danh sách người đăng ký ({data.Count_Reg} người):</strong>
+          <strong>Danh sách người đăng ký:</strong>
 
           {data.Registrants.map((name, index) => (
             <li key={index}>{name}</li>

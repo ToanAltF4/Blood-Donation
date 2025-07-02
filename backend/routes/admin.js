@@ -39,4 +39,10 @@ router.get('/emergency-requests', authenticateToken, authorizeRoles('Staff'), ad
 // Cập nhật trạng thái yêu cầu máu khẩn cấp
 router.post('/update-emergency-status', authenticateToken, authorizeRoles('Staff'), adminController.updateEmergencyStatus);
 
+// ==== EVENT REPORT CRUD (STAFF + ADMIN) ====
+router.get('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.getAllEventReports);
+router.post('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.createEventReport);
+router.put('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.updateEventReport);
+router.delete('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.deleteEventReport);
+
 module.exports = router;
