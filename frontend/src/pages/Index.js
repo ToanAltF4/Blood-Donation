@@ -19,12 +19,18 @@ const showAlert = (options) => {
     ...options,
     backdrop: false,
     allowOutsideClick: false,
+    allowEscapeKey: true,
     customClass: {
       container: 'swal-no-aria-hidden',
       ...options.customClass
     },
     didOpen: () => {
-      // Không set focus vào popup để tránh viền xanh
+      // Đảm bảo không có element nào trong popup có focus
+      const popup = document.querySelector('.swal2-popup');
+      if (popup) {
+        popup.setAttribute('tabindex', '-1');
+        popup.focus();
+      }
     },
     willClose: () => {
       // Khôi phục focus về element trước đó
@@ -151,6 +157,32 @@ function Index() {
 
   const handleReadyDonate = async () => {
     try {
+      // Kiểm tra HTTPS cho geolocation trên public domain
+      if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+        showAlert({
+          icon: "warning",
+          title: "Yêu cầu HTTPS",
+          text: "Để lấy vị trí, website cần được truy cập qua HTTPS trên public domain.",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
+        });
+        return;
+      }
+
+      // Kiểm tra hỗ trợ geolocation
+      if (!navigator.geolocation) {
+        showAlert({
+          icon: "error",
+          title: "Trình duyệt không hỗ trợ",
+          text: "Trình duyệt của bạn không hỗ trợ lấy vị trí.",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
+        });
+        return;
+      }
+
       // Lấy vị trí hiện tại
       const position = await new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject, {
@@ -159,7 +191,9 @@ function Index() {
           maximumAge: 60000
         });
       });
+      
       const { latitude, longitude } = position.coords;
+      
       // Gọi API đăng ký
       const token = localStorage.getItem('token');
       const response = await fetch(`${HOST}/api/ready-donate/register`, {
@@ -192,10 +226,31 @@ function Index() {
         });
       }
     } catch (error) {
+      console.error('Geolocation error:', error);
+      
       if (error.code === 1) {
         showAlert({
           icon: "warning",
-          title: "Vui lòng cho phép truy cập vị trí để đăng ký!",
+          title: "Quyền truy cập bị từ chối",
+          text: "Vui lòng cho phép truy cập vị trí trong cài đặt trình duyệt để đăng ký!",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
+        });
+      } else if (error.code === 2) {
+        showAlert({
+          icon: "error",
+          title: "Không thể xác định vị trí",
+          text: "Không thể xác định vị trí hiện tại. Vui lòng thử lại!",
+          customClass: {
+            container: 'swal-no-aria-hidden'
+          }
+        });
+      } else if (error.code === 3) {
+        showAlert({
+          icon: "error",
+          title: "Hết thời gian chờ",
+          text: "Không thể lấy vị trí trong thời gian quy định. Vui lòng thử lại!",
           customClass: {
             container: 'swal-no-aria-hidden'
           }
@@ -204,6 +259,7 @@ function Index() {
         showAlert({
           icon: "error",
           title: "Có lỗi xảy ra khi lấy vị trí!",
+          text: error.message || "Vui lòng thử lại sau.",
           customClass: {
             container: 'swal-no-aria-hidden'
           }
@@ -345,12 +401,18 @@ function Index() {
               <button
                 className="btn btn-secondary"
                 onClick={() => setShowReadyDonateModal(false)}
+                style={{ outline: 'none' }}
+                onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.5)'}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
               >
                 Hủy
               </button>
               <button
                 className="btn btn-success"
                 onClick={handleReadyDonate}
+                style={{ outline: 'none' }}
+                onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px rgba(59, 130, 246, 0.5)'}
+                onBlur={(e) => e.target.style.boxShadow = 'none'}
               >
                 Xác nhận
               </button>

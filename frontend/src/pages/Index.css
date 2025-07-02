@@ -393,3 +393,36 @@
 .swal2-backdrop-show {
   background: transparent !important;
 }
+
+/* Cải thiện accessibility cho modal */
+.swal2-popup {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15) !important;
+}
+
+.swal2-popup button {
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+}
+
+/* Đảm bảo không có focus trap */
+.swal2-popup * {
+  outline: none !important;
+}
+
+.swal2-popup button:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Fix cho modal overlay */
+.modal-overlay {
+  z-index: 2000 !important;
+}
+
+.modal-overlay button {
+  outline: none !important;
+}
+
+.modal-overlay button:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5) !important;
+}

@@ -1,5 +1,5 @@
 const sql = require("../config/db");
-const { sendBloodUsedNotification } = require("../utils/mailer");
+const { sendBloodUsedNotification, sendEmergencyRequestApprovedEmail } = require("../utils/mailer");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -388,16 +388,17 @@ exports.getEmergencyRequests = async (req, res) => {
   try {
     const [rows] = await sql.query(`
       SELECT 
-        er.Request_ID,
-        er.Blood_Type,
-        er.Volume_Needed,
-        er.Urgency_Level,
-        er.Status,
-        er.Request_Date,
-        er.Description,
-        er.Contact_Info
-      FROM Emergency_Request er
-      ORDER BY er.Request_Date DESC
+        e.Emergency_ID,
+        e.Location,
+        e.Blood_need,
+        e.Status,
+        e.User_ID,
+        u.Full_Name,
+        u.Phone,
+        u.Email
+      FROM Emergency e
+      JOIN User u ON e.User_ID = u.User_ID
+      ORDER BY e.Emergency_ID DESC
     `);
     return res.status(200).json(rows);
   } catch (error) {
@@ -407,20 +408,40 @@ exports.getEmergencyRequests = async (req, res) => {
 };
 
 exports.updateEmergencyStatus = async (req, res) => {
-  const { Request_ID, Status } = req.body;
+  const { Emergency_ID, Status } = req.body;
   
-  if (!Request_ID || !Status) {
-    return res.status(400).json({ message: "Thiếu Request_ID hoặc Status." });
+  if (!Emergency_ID || !Status) {
+    return res.status(400).json({ message: "Thiếu Emergency_ID hoặc Status." });
   }
 
   try {
     const [result] = await sql.query(
-      "UPDATE Emergency_Request SET Status = ? WHERE Request_ID = ?",
-      [Status, Request_ID]
+      "UPDATE Emergency SET Status = ? WHERE Emergency_ID = ?",
+      [Status, Emergency_ID]
     );
     
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: "Không tìm thấy yêu cầu khẩn cấp." });
+    }
+
+    // Nếu trạng thái là approved, gửi email cho người dùng
+    if (Status === 'approved') {
+      // Lấy thông tin yêu cầu và user
+      const [rows] = await sql.query(`
+        SELECT e.Blood_need, e.Location, u.Email, u.Full_Name
+        FROM Emergency e
+        JOIN User u ON e.User_ID = u.User_ID
+        WHERE e.Emergency_ID = ?
+      `, [Emergency_ID]);
+      if (rows.length > 0) {
+        const req = rows[0];
+        await sendEmergencyRequestApprovedEmail(
+          req.Email,
+          req.Full_Name,
+          req.Blood_need,
+          req.Location
+        );
+      }
     }
     
     return res.status(200).json({ message: "Cập nhật trạng thái thành công." });
