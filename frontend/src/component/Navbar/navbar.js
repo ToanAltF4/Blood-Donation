@@ -76,6 +76,12 @@ function Navbar() {
             </div>
             <div
               className="dropdown-item"
+              onClick={() => navigate("/admin/emergency-requests")}
+            >
+              Yêu cầu máu khẩn cấp
+            </div>
+            <div
+              className="dropdown-item"
               onClick={() => navigate("/admin/event-reports")}
             >
               Thống kê
