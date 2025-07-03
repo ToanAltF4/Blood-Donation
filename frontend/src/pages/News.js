@@ -47,6 +47,14 @@ function News() {
     });
   };
 
+  // Hàm cắt ngắn số chữ
+  const truncateWords = (str, n) => {
+    if (!str) return '';
+    const words = str.split(' ');
+    if (words.length <= n) return str;
+    return words.slice(0, n).join(' ') + '...';
+  };
+
   if (displayedPosts.length === 0)
     return <div className="container py-5">Đang tải bài viết...</div>;
 
@@ -72,7 +80,17 @@ function News() {
               <p className="card-text text-muted">
                 {formatDate(latestPost.Post_Time)}
               </p>
-              <p className="card-text">{latestPost.Post_Content}</p>
+              <p className="card-text">
+                {truncateWords(latestPost.Post_Content, 30)}
+                {latestPost.Post_Content && latestPost.Post_Content.split(' ').length > 30 && (
+                  <span
+                    style={{ color: '#007bff', cursor: 'pointer', marginLeft: 6, fontWeight: 500 }}
+                    onClick={() => navigate(`/news/${latestPost.Post_ID}`)}
+                  >
+                    Xem thêm
+                  </span>
+                )}
+              </p>
             </div>
           </div>
         </div>
