@@ -22,6 +22,8 @@ function RegisterPage() {
     family_contact: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   // Hàm xử lý nhập liệu
   const handleChange = (e) => {
     setFormData({
@@ -30,9 +32,34 @@ function RegisterPage() {
     });
   };
 
+  // Validate form
+  const validateForm = () => {
+    const newErrors = {};
+    // CCCD: 12 số
+    if (!/^[0-9]{12}$/.test(formData.cccd)) {
+      newErrors.cccd = "Số CCCD phải là 12 chữ số.";
+    }
+    // Họ tên: chỉ chữ cái, khoảng trắng, không ký tự đặc biệt
+    if (!/^[A-Za-zÀ-ỹ\s]+$/.test(formData.full_name.trim())) {
+      newErrors.full_name = "Họ và tên chỉ được chứa chữ cái, không có ký tự đặc biệt hoặc số.";
+    }
+    // Địa chỉ: chỉ chữ, số, khoảng trắng, dấu phẩy, dấu chấm, tối thiểu 10 ký tự
+    if (!/^[A-Za-zÀ-ỹ0-9\s,\.]{10,}$/.test(formData.location.trim())) {
+      newErrors.location = "Địa chỉ phải tối thiểu 10 ký tự, chỉ chứa chữ, số, dấu phẩy, dấu chấm.";
+    }
+    // SĐT: 10-11 số
+    if (!/^\d{10,11}$/.test(formData.phone)) {
+      newErrors.phone = "Số điện thoại phải từ 10 đến 11 chữ số.";
+    }
+    return newErrors;
+  };
+
   // Hàm xử lý đăng ký
   const handleRegister = async (e) => {
     e.preventDefault();
+    const newErrors = validateForm();
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length > 0) return;
 
     try {
       const response = await fetch(`${HOST}/api/auth/register`, {
@@ -102,16 +129,17 @@ function RegisterPage() {
           <div className="row g-3">
             <div className="col-md-6">
               <label className="form-label fw-bold">
-                Số CMND/CCCD/Hộ Chiếu <span className="text-danger">*</span>
+                Số CCCD <span className="text-danger">*</span>
               </label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.cccd ? 'is-invalid' : ''}`}
                 name="cccd"
                 placeholder="Nhập giấy tờ tùy thân"
                 value={formData.cccd}
                 onChange={handleChange}
               />
+              {errors.cccd && <div className="invalid-feedback">{errors.cccd}</div>}
             </div>
 
             <div className="col-md-6">
@@ -120,12 +148,13 @@ function RegisterPage() {
               </label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.full_name ? 'is-invalid' : ''}`}
                 name="full_name"
                 placeholder="Nhập họ và tên"
                 value={formData.full_name}
                 onChange={handleChange}
               />
+              {errors.full_name && <div className="invalid-feedback">{errors.full_name}</div>}
             </div>
 
             <div className="col-md-6">
@@ -134,12 +163,13 @@ function RegisterPage() {
               </label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.location ? 'is-invalid' : ''}`}
                 name="location"
                 placeholder="Nhập địa chỉ"
                 value={formData.location}
                 onChange={handleChange}
               />
+              {errors.location && <div className="invalid-feedback">{errors.location}</div>}
             </div>
 
             <div className="col-md-6">
@@ -148,12 +178,13 @@ function RegisterPage() {
               </label>
               <input
                 type="text"
-                className="form-control"
+                className={`form-control ${errors.phone ? 'is-invalid' : ''}`}
                 name="phone"
                 placeholder="Nhập số điện thoại"
                 value={formData.phone}
                 onChange={handleChange}
               />
+              {errors.phone && <div className="invalid-feedback">{errors.phone}</div>}
             </div>
 
             <div className="col-md-6">

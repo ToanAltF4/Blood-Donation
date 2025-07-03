@@ -444,7 +444,7 @@ function EventDetail() {
                         }
                       >
                         <option value="pending">Chờ xử lý</option>
-                        <option value="approved">Duyệt</option>
+                        <option value="approved">Đã hiến</option>
                         <option value="rejected">Từ chối</option>
                       </select>
                     </div>
