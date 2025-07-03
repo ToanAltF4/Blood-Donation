@@ -97,7 +97,7 @@ function LoginPage() {
         if (role === "Admin") {
           navigate("/admin/dashboard");
         } else if (role === "Staff") {
-          navigate("/staff/page");
+          navigate("/");
         } else {
           navigate("/");
         }

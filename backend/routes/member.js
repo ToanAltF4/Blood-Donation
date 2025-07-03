@@ -13,5 +13,7 @@ router.get('/my-donation-history', authenticateToken, memberController.getMyDona
 router.get('/events', authenticateToken, memberController.getAllEventsForMember);
 // Member gửi yêu cầu máu khẩn cấp
 router.post('/emergency', authenticateToken, memberController.emergencyRequest);
+// Member gửi feedback
+router.post('/feedback', authenticateToken, memberController.submitFeedback);
 
 module.exports = router; 

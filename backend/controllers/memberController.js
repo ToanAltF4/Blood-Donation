@@ -93,4 +93,21 @@ exports.emergencyRequest = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: 'Lỗi server.' });
   }
+};
+
+exports.submitFeedback = async (req, res) => {
+  try {
+    const userId = req.user.user_id;
+    const { content } = req.body;
+    if (!content || content.trim() === "") {
+      return res.status(400).json({ message: "Nội dung không được để trống." });
+    }
+    await sql.query(
+      'INSERT INTO Feedback (Feedback_Content, User_ID) VALUES (?, ?)',
+      [content, userId]
+    );
+    return res.status(201).json({ message: "Gửi phản hồi thành công!" });
+  } catch (error) {
+    return res.status(500).json({ message: "Lỗi server." });
+  }
 }; 

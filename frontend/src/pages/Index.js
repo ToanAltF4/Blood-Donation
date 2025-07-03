@@ -85,6 +85,10 @@ function Index() {
   const [emergencyBlood, setEmergencyBlood] = useState("");
   const [emergencyLoading, setEmergencyLoading] = useState(false);
   const newsPerPage = 8;
+  const [feedbackContent, setFeedbackContent] = useState("");
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
+  const [feedbackSuccess, setFeedbackSuccess] = useState("");
+  const [feedbackError, setFeedbackError] = useState("");
 
   // Lấy user từ localStorage
   const user = JSON.parse(localStorage.getItem("user"));
@@ -323,6 +327,31 @@ function Index() {
       });
     }
     setEmergencyLoading(false);
+  };
+
+  const handleSubmitFeedback = async () => {
+    setFeedbackSuccess("");
+    setFeedbackError("");
+    if (!feedbackContent.trim()) {
+      setFeedbackError("Vui lòng nhập nội dung góp ý!");
+      return;
+    }
+    setFeedbackLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      const res = await axios.post(`${HOST}/api/member/feedback`, { content: feedbackContent }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.status === 201) {
+        setFeedbackSuccess("Cảm ơn bạn đã gửi phản hồi về hệ thống!");
+        setFeedbackContent("");
+      } else {
+        setFeedbackError(res.data.message || "Có lỗi xảy ra!");
+      }
+    } catch (err) {
+      setFeedbackError(err.response?.data?.message || "Không gửi được góp ý!");
+    }
+    setFeedbackLoading(false);
   };
 
   return (
@@ -733,6 +762,32 @@ function Index() {
             <p className="contact-info">
               <strong>TON THAT HOANG MINH</strong> minhtth5@fpt.edu.vn
             </p>
+
+            {/* Feedback box cho member */}
+            {isMember && (
+              <div className="card shadow-sm mt-4" style={{ maxWidth: 340, marginLeft: '0px', borderRadius: 12 }}>
+                <div className="card-body p-3">
+                  <textarea
+                    className="form-control mb-2"
+                    style={{ minHeight: 60, fontSize: 15, borderRadius: 8, resize: 'vertical' }}
+                    placeholder="đóng góp ý kiến của bạn..."
+                    value={feedbackContent}
+                    onChange={e => setFeedbackContent(e.target.value)}
+                    maxLength={500}
+                  />
+                  <button
+                    className="btn btn-primary w-100 fw-bold"
+                    style={{ borderRadius: 8, fontSize: 15 }}
+                    onClick={handleSubmitFeedback}
+                    disabled={feedbackLoading}
+                  >
+                    {feedbackLoading ? 'Đang gửi...' : 'Gửi'}
+                  </button>
+                  {feedbackSuccess && <div className="text-success text-center mt-2">{feedbackSuccess}</div>}
+                  {feedbackError && <div className="text-danger text-center mt-2">{feedbackError}</div>}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Bên phải */}

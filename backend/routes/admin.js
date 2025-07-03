@@ -45,4 +45,7 @@ router.post('/event-reports', authenticateToken, authorizeRoles('Admin','Staff')
 router.put('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.updateEventReport);
 router.delete('/event-reports', authenticateToken, authorizeRoles('Admin','Staff'), adminController.deleteEventReport);
 
+// Admin xem tất cả feedback
+router.get('/feedback', authenticateToken, authorizeRoles('Admin'), adminController.getAllFeedback);
+
 module.exports = router;

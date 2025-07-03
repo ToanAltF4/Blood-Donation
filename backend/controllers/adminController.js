@@ -536,3 +536,17 @@ exports.deleteEventReport = async (req, res) => {
     return res.status(500).json({ message: "Lỗi server." });
   }
 };
+
+exports.getAllFeedback = async (req, res) => {
+  try {
+    const [rows] = await require('../config/db').query(
+      `SELECT u.Full_Name, u.Phone, u.Email, f.Feedback_Content
+       FROM Feedback f
+       JOIN User u ON f.User_ID = u.User_ID
+       ORDER BY f.Feedback_ID DESC`
+    );
+    return res.status(200).json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: 'Lỗi server.' });
+  }
+};

@@ -41,6 +41,12 @@ function Navbar() {
             >
               Thống kê
             </div>
+            <div
+              className="dropdown-item"
+              onClick={() => navigate("/admin/feedback")}
+            >
+              Góp ý người dùng
+            </div>
             <div className="dropdown-item" onClick={handleLogout}>
               Đăng xuất
             </div>

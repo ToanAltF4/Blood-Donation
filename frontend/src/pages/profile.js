@@ -107,8 +107,8 @@ function UserProfile() {
 
           <div className="sidebar-menu">
             <ul className="menu">
-              <li>Sự Kiện Đã Đăng Ký</li>
-              <li>Lịch Sử Hiến Máu</li>
+              <li onClick={() => navigate("/my-registrations")}>Sự Kiện Đã Đăng Ký</li>
+              <li onClick={() => navigate("/my-donation-history")}>Lịch Sử Hiến Máu</li>
               <li onClick={() => setEditMode(true)}>Cập Nhật Hồ Sơ</li>
               <li onClick={() => navigate("/change-password")}>Đổi Mật Khẩu</li>
             </ul>
