@@ -571,11 +571,7 @@ function Index() {
             <div className="intro-left">
               <h3>Về Cơ Sở Y Tế</h3>
               <p>
-                Chúng tôi là một nền tảng hỗ trợ kết nối người hiến máu với
-                cơ sở y tế. Với sứ mệnh "Một giọt máu - Triệu hy vọng", chúng
-                tôi mong muốn xây dựng một cộng đồng hiến máu nhân đạo rộng lớn,
-                minh bạch và hiệu quả, đồng thời truy xuất thông tin của khách hàng
-                để đảm bảo quyền lợi và an toàn cho người hiến máu.
+              Chúng tôi là nền tảng kết nối người hiến máu với cơ sở y tế, với sứ mệnh "Một giọt máu – Triệu hy vọng". Chúng tôi mong muốn xây dựng một cộng đồng hiến máu nhân đạo rộng lớn, minh bạch và hiệu quả. Thông qua hệ thống thông minh, người hiến máu có thể dễ dàng theo dõi lịch sử hiến máu, được nhắc lịch định kỳ và đảm bảo an toàn tuyệt đối cho sức khỏe. Chúng tôi cam kết truy xuất rõ ràng thông tin, bảo mật dữ liệu và mang đến trải nghiệm thuận tiện, nhanh chóng. Mỗi giọt máu bạn trao đi không chỉ là sự sẻ chia mà còn là cơ hội cứu sống một con người.
               </p>
             </div>
 
@@ -586,7 +582,7 @@ function Index() {
                   <h4>Phạm Đức Toàn</h4>
                   <p className="member-role">fullstack Developer</p>
                   <img
-                    src="https://tse4.mm.bing.net/th?id=OIP.PRxNOObh8Efy-7irFJNBygHaHa&pid=Api&P=0&h=180"
+                    src="img/toan.jpg"
                     alt="CEO"
                     className="member-avatar-vertical"
                   />
@@ -600,7 +596,7 @@ function Index() {
                   <h4>Nguyễn Văn Tiên</h4>
                   <p className="member-role">Frontend Developer</p>
                   <img
-                    src="https://p16-useast2a.tiktokcdn.com/tos-useast2a-avt-0068-euttp/b785f99ba39cb08030591a9aeb0868bc~c5_720x720.jpeg"
+                    src="img/tien.jpg"
                     alt="Founder"
                     className="member-avatar-vertical"
                   />

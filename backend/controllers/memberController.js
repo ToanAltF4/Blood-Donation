@@ -29,6 +29,8 @@ exports.registerEvent = async (req, res) => {
 
     // Đăng ký mới
     await sql.query('INSERT INTO List_Reg (User_ID, Event_ID, Status) VALUES (?, ?, ?)', [userId, Event_ID, 'pending']);
+    // Cập nhật lại Count_Reg
+    await sql.query('UPDATE Event SET Count_Reg = (SELECT COUNT(*) FROM List_Reg WHERE Event_ID = ?) WHERE Event_ID = ?', [Event_ID, Event_ID]);
     return res.status(201).json({ message: 'Đăng ký thành công.' });
   } catch (error) {
     return res.status(500).json({ message: 'Lỗi server.' });

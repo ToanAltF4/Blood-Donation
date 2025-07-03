@@ -31,6 +31,7 @@ function EventDetail() {
   const [loading, setLoading] = useState(true);
   const [editingDonor, setEditingDonor] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [searchName, setSearchName] = useState("");
 
   const formatDatetime = (datetimeString) => {
     return dayjs(datetimeString).format("YYYY-MM-DD HH:mm");
@@ -133,6 +134,11 @@ function EventDetail() {
     }
   };
 
+  // Lọc danh sách theo tên
+  const filteredDonors = donors.filter(donor =>
+    donor.Full_Name?.toLowerCase().includes(searchName.toLowerCase())
+  );
+
   const columns = [
     {
       name: "Tên người hiến",
@@ -189,7 +195,7 @@ function EventDetail() {
           {row.Status === "pending"
             ? "Chờ xử lý"
             : row.Status === "approved"
-            ? "Đã duyệt"
+            ? "Đã hiến"
             : row.Status === "rejected"
             ? "Đã từ chối"
             : row.Status}
@@ -329,9 +335,19 @@ function EventDetail() {
             </h5>
           </div>
           <div className="card-body">
+            <div className="mb-3 d-flex justify-content-end">
+              <input
+                type="text"
+                className="form-control"
+                style={{ maxWidth: 320 }}
+                placeholder="Tìm kiếm theo tên người dùng..."
+                value={searchName}
+                onChange={e => setSearchName(e.target.value)}
+              />
+            </div>
             <DataTable
               columns={columns}
-              data={donors}
+              data={filteredDonors}
               pagination
               paginationPerPage={10}
               paginationRowsPerPageOptions={[10, 20, 50]}
