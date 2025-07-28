@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { data, useNavigate } from "react-router-dom";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import { FaEdit, FaTrash, FaEye, FaEyeSlash } from "react-icons/fa";
 import { Modal, Button, Form } from "react-bootstrap";
 import Swal from "sweetalert2"; // Thêm import này
 import axios from "axios";
@@ -58,6 +58,7 @@ function ControllNews() {
             Post_Header: editingPost.Post_Header,
             Post_Content: editingPost.Post_Content,
             Post_Img: editingPost.Post_Img || "",
+            Status: editingPost.Status || "public",
             User_ID: 1, // Hoặc từ user session
           },
           {
@@ -76,6 +77,7 @@ function ControllNews() {
             Post_Header: editingPost.Post_Header,
             Post_Content: editingPost.Post_Content,
             Post_Img: editingPost.Post_Img || "",
+            Status: editingPost.Status || "public",
           },
           {
             headers: {
@@ -124,9 +126,36 @@ function ControllNews() {
       }
     });
   };
+
+  const handleToggleStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === 'public' ? 'private' : 'public';
+    const statusText = newStatus === 'public' ? 'công khai' : 'riêng tư';
+    
+    try {
+      await axios.put(
+        HOST + `/api/news/togglestatus/${id}`,
+        { status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      Swal.fire("Thành công!", `Bài đăng đã chuyển sang trạng thái ${statusText}.`, "success");
+      fetchNews(); // Load lại dữ liệu
+    } catch (error) {
+      console.error("Lỗi cập nhật trạng thái:", error);
+      Swal.fire("Lỗi", "Không thể cập nhật trạng thái bài viết", "error");
+    }
+  };
+
   const fetchNews = async () => {
     try {
-      const res = await axios.get(HOST + "/api/news/getnews");
+      const res = await axios.get(HOST + "/api/news/getallnewsforadmin", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (Array.isArray(res.data.posts)) {
         console.log(res.data);
         setPosts(res.data.posts);
@@ -189,8 +218,9 @@ function ControllNews() {
             <th>ID_post</th>
             <th>Post_Header</th>
             <th style={{ width: "300px" }}>Content</th>
+            <th>Status</th>
             <th>Time</th>
-            <th style={{ width: "120px" }}>Action</th>
+            <th style={{ width: "150px" }}>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -211,6 +241,11 @@ function ControllNews() {
                 {post.Post_Content}
               </td>
               <td>
+                <span className={`badge ${post.Status === 'public' ? 'bg-success' : 'bg-secondary'}`}>
+                  {post.Status === 'public' ? 'Công khai' : 'Riêng tư'}
+                </span>
+              </td>
+              <td>
                 {new Date(post.Post_Time).toLocaleString("vi-VN", {
                   day: "2-digit",
                   month: "2-digit",
@@ -221,14 +256,23 @@ function ControllNews() {
               </td>
               <td>
                 <button
-                  className="btn btn-sm btn-outline-primary me-2"
+                  className="btn btn-sm btn-outline-primary me-1"
                   onClick={() => openModal("edit", post)}
+                  title="Chỉnh sửa"
                 >
                   <FaEdit />
                 </button>
                 <button
+                  className={`btn btn-sm ${post.Status === 'public' ? 'btn-outline-warning' : 'btn-outline-info'} me-1`}
+                  onClick={() => handleToggleStatus(post.Post_ID, post.Status)}
+                  title={post.Status === 'public' ? 'Chuyển sang riêng tư' : 'Chuyển sang công khai'}
+                >
+                  {post.Status === 'public' ? <FaEyeSlash /> : <FaEye />}
+                </button>
+                <button
                   className="btn btn-sm btn-outline-danger"
                   onClick={() => handleDelete(post.Post_ID)}
+                  title="Xóa"
                 >
                   <FaTrash />
                 </button>
@@ -237,7 +281,7 @@ function ControllNews() {
           ))}
           {paginatedPosts.length === 0 && (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan="6" className="text-center">
                 Không tìm thấy bài viết
               </td>
             </tr>
@@ -315,6 +359,22 @@ function ControllNews() {
                   })
                 }
               />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Label>Trạng thái</Form.Label>
+              <Form.Select
+                value={editingPost?.Status || "public"}
+                onChange={(e) =>
+                  setEditingPost({
+                    ...editingPost,
+                    Status: e.target.value,
+                  })
+                }
+              >
+                <option value="public">Công khai</option>
+                <option value="private">Riêng tư</option>
+              </Form.Select>
             </Form.Group>
 
             <Form.Group className="mb-3">
